@@ -31,10 +31,11 @@ public class ThreadsController extends Thread {
 
 	// Important part :
 	public void run() {
+		moveExterne();
 		while (true) {
 			moveInterne(directionSnake);
 			checkCollision();
-			moveExterne();
+			//moveExterne();
 			deleteTail();
 			pauser();
 		}

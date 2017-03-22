@@ -1,32 +1,62 @@
 package com.globalcitizen.model.characters;
 
+import java.awt.Graphics;
+import java.awt.Shape;
+import java.util.List;
+
+import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
+import com.shape.visitor.VisitorDraw;
+
 public class Hero extends Creature {
-	private int energyPoints;
-	private int maximunEnergyPoints;
-	private String spriteModel;
-
-	public int getEnergyPoints() {
-		return energyPoints;
+	public Hero(Point currentPosition) {
+		super(currentPosition);
+		this.setHorizontalUnits(20);
+		this.setVerticalUnits(20);
+		this.setCreatureType(GlobalCitizenConstants.CREATURE_TYPE_HERO);
 	}
 
-	public void setEnergyPoints(int energyPoints) {
-		this.energyPoints = energyPoints;
+	public void paintComponent(Graphics g, VisitorDraw visitor) {
+		visitor.onDrawHero(g, this);
 	}
 
-	public int getMaximunEnergyPoints() {
-		return maximunEnergyPoints;
+	public boolean moveRight(List<Street> listStreets) {
+		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().getX() + 1,
+				this.getCurrentPosition().getY())) {
+			this.getCurrentPosition().setX(this.getCurrentPosition().getX() + 1);
+			return true;
+		}
+		return false;
+
 	}
 
-	public void setMaximunEnergyPoints(int maximunEnergyPoints) {
-		this.maximunEnergyPoints = maximunEnergyPoints;
+	public boolean moveUp(List<Street> listStreets) {
+		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().getX(),
+				this.getCurrentPosition().getY() - 1)) {
+			this.getCurrentPosition().setY(this.getCurrentPosition().getY() - 1);
+			return true;
+		}
+		return false;
+
 	}
 
-	public String getSpriteModel() {
-		return spriteModel;
+	public boolean moveLeft(List<Street> listStreets) {
+		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().getX() - 1,
+				this.getCurrentPosition().getY())) {
+			this.getCurrentPosition().setX(this.getCurrentPosition().getX() - 1);
+			return true;
+		}
+		return false;
+
 	}
 
-	public void setSpriteModel(String spriteModel) {
-		this.spriteModel = spriteModel;
+	public boolean moveDown(List<Street> listStreets) {
+		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().getX(),
+				this.getCurrentPosition().getY() + 1)) {
+			this.getCurrentPosition().setY(this.getCurrentPosition().getY() + 1);
+			return true;
+		}
+		return false;
+
 	}
 
 }
