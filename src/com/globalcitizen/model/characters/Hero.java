@@ -1,15 +1,17 @@
 package com.globalcitizen.model.characters;
 
 import java.awt.Graphics;
-import java.awt.Shape;
+import java.awt.Point;
 import java.util.List;
+
+import javax.swing.JPanel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
 import com.shape.visitor.VisitorDraw;
 
 public class Hero extends Creature {
-	public Hero(Point currentPosition) {
-		super(currentPosition);
+	public Hero(Point currentPosition, JPanel map) {
+		super(currentPosition, map, 1);
 		this.setHorizontalUnits(20);
 		this.setVerticalUnits(20);
 		this.setCreatureType(GlobalCitizenConstants.CREATURE_TYPE_HERO);
@@ -20,9 +22,8 @@ public class Hero extends Creature {
 	}
 
 	public boolean moveRight(List<Street> listStreets) {
-		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().getX() + 1,
-				this.getCurrentPosition().getY())) {
-			this.getCurrentPosition().setX(this.getCurrentPosition().getX() + 1);
+		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().x + 1, this.getCurrentPosition().y)) {
+			this.getCurrentPosition().x += 1;
 			return true;
 		}
 		return false;
@@ -30,9 +31,8 @@ public class Hero extends Creature {
 	}
 
 	public boolean moveUp(List<Street> listStreets) {
-		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().getX(),
-				this.getCurrentPosition().getY() - 1)) {
-			this.getCurrentPosition().setY(this.getCurrentPosition().getY() - 1);
+		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().x, this.getCurrentPosition().y - 1)) {
+			this.getCurrentPosition().y -= 1;
 			return true;
 		}
 		return false;
@@ -40,9 +40,8 @@ public class Hero extends Creature {
 	}
 
 	public boolean moveLeft(List<Street> listStreets) {
-		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().getX() - 1,
-				this.getCurrentPosition().getY())) {
-			this.getCurrentPosition().setX(this.getCurrentPosition().getX() - 1);
+		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().x - 1, this.getCurrentPosition().y)) {
+			this.getCurrentPosition().x -= 1;
 			return true;
 		}
 		return false;
@@ -50,9 +49,8 @@ public class Hero extends Creature {
 	}
 
 	public boolean moveDown(List<Street> listStreets) {
-		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().getX(),
-				this.getCurrentPosition().getY() + 1)) {
-			this.getCurrentPosition().setY(this.getCurrentPosition().getY() + 1);
+		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().x, this.getCurrentPosition().y + 1)) {
+			this.getCurrentPosition().y += 1;
 			return true;
 		}
 		return false;

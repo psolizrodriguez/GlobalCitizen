@@ -22,7 +22,7 @@ public class ThreadsController extends Thread {
 	}
 
 	// delay between each move
-	private void pauser() {
+	public void pauser() {
 		try {
 			sleep(speed);
 		} catch (InterruptedException e) {
@@ -31,7 +31,7 @@ public class ThreadsController extends Thread {
 	}
 
 	// Stops The Game
-	private void stopTheGame() {
+	public void stopTheGame() {
 
 		while (true) {
 			pauser();

@@ -1,9 +1,11 @@
 package com.globalcitizen.model.characters;
 
 import java.awt.Graphics;
-import java.awt.Shape;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JPanel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
 import com.shape.visitor.VisitorDraw;
@@ -16,22 +18,30 @@ public class Street {
 	int rightSideWalkSize;
 	int leftSideWalkSize;
 	List<Car> listCars;
-	Shape logicalForm;
+	List<Street> streets;
 
-	public Shape getLogicalForm() {
-		return logicalForm;
+	public List<Street> getStreets() {
+		return streets;
 	}
 
-	public void setLogicalForm(Shape logicalForm) {
-		this.logicalForm = logicalForm;
+	public void setStreets(List<Street> streets) {
+		this.streets = streets;
 	}
 
 	public Street(int direction, Point startingPoint, int streetWidth) {
 		this.direction = direction;
 		this.startingPoint = startingPoint;
-		this.streetWidth = streetWidth;
-		this.streetHeight = GlobalCitizenConstants.STREET_WIDTH;
+		if (direction == 2 || direction == 4) {
+			this.streetWidth = GlobalCitizenConstants.STREET_WIDTH;
+			this.streetHeight = streetWidth;
+		} else {
+
+			this.streetWidth = streetWidth;
+			this.streetHeight = GlobalCitizenConstants.STREET_WIDTH;
+		}
+
 		listCars = new ArrayList<>();
+		streets = new ArrayList<>();
 	}
 
 	public List<Car> getListCars() {
@@ -94,19 +104,25 @@ public class Street {
 		this.leftSideWalkSize = leftSideWalkSize;
 	}
 
-	public boolean createCar() {
-		int initial_x = this.getStartingPoint().getX();
-		int initial_y = this.getStartingPoint().getY();
-		if (this.getDirection() == 90) {
-			initial_x = initial_x - this.getStreetHeight() + GlobalCitizenConstants.SIDE_WIDTH;
-		} else {
-			if (this.getDirection() == 0) {
-				initial_y += GlobalCitizenConstants.SIDE_WIDTH;
-			}
+	public Car createCar(JPanel map) {
+		int initial_x = this.getStartingPoint().x;
+		int initial_y = this.getStartingPoint().y;
+
+		switch (this.getDirection()) {
+		case 2:
+			break;
+		case 3:
+			initial_x = this.getStartingPoint().x + this.getStreetWidth() - GlobalCitizenConstants.CAR_WIDTH;
+			break;
+		case 4:
+			initial_y = this.getStartingPoint().y + this.getStreetHeight() - GlobalCitizenConstants.CAR_WIDTH;
+			break;
+		default:
+			break;
 		}
-		Car car = new Car(this, initial_x, initial_y);
+		Car car = new Car(map, this, initial_x, initial_y);
 		listCars.add(car);
-		return true;
+		return car;
 	}
 
 	public boolean moveCars(VisitorDraw visitor) {

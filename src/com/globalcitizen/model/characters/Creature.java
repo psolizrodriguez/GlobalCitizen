@@ -1,12 +1,18 @@
 package com.globalcitizen.model.characters;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.util.List;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
 import com.shape.visitor.VisitorDraw;
 
-public abstract class Creature {
+public abstract class Creature extends JLabel {
 	private List<Inventory> listInventory;
 	private List<CreatureBehavior> listCreatureBehavior;
 	private int movementSpeed;
@@ -18,6 +24,25 @@ public abstract class Creature {
 	private Point currentPosition;
 	private int creatureType;
 	private Rectangle previousSquare;
+	private Rectangle currentSquare;
+	private Shape currentLogicalShape;
+	JPanel map;
+
+	public Shape getCurrentLogicalShape() {
+		return currentLogicalShape;
+	}
+
+	public void setCurrentLogicalShape(Shape currentLogicalShape) {
+		this.currentLogicalShape = currentLogicalShape;
+	}
+
+	public Rectangle getCurrentSquare() {
+		return currentSquare;
+	}
+
+	public void setCurrentSquare(Rectangle currentSquare) {
+		this.currentSquare = currentSquare;
+	}
 
 	public Rectangle getPreviousSquare() {
 		return previousSquare;
@@ -27,8 +52,18 @@ public abstract class Creature {
 		this.previousSquare = previousSquare;
 	}
 
-	public Creature(Point currentPosition) {
+	public Creature(Point currentPosition, JPanel map, int streetDirection) {
 		this.currentPosition = currentPosition;
+		this.map = map;
+		if (streetDirection == 2 || streetDirection == 4) {
+			this.setHorizontalUnits(GlobalCitizenConstants.CAR_HEIGHT);
+			this.setVerticalUnits(GlobalCitizenConstants.CAR_WIDTH);
+		} else {
+			this.setHorizontalUnits(GlobalCitizenConstants.CAR_WIDTH);
+			this.setVerticalUnits(GlobalCitizenConstants.CAR_HEIGHT);
+		}
+		map.setBounds(currentPosition.x, currentPosition.y, this.horizontalUnits, this.verticalUnits);
+		map.add(this);
 	}
 
 	public int getCreatureType() {
@@ -113,10 +148,13 @@ public abstract class Creature {
 
 	public boolean iscreatureInsideOfStreets(List<Street> listStreets, int futureX, int futureY) {
 		if (listStreets != null && listStreets.size() > 0) {
-			Rectangle creature = new Rectangle(futureX, futureY, getHorizontalUnits(), getVerticalUnits());
 			for (Street street : listStreets) {
-				if (street.getLogicalForm().contains(creature)) {
-					return true;
+				if (street.getStartingPoint().getX() < futureX
+						&& street.getStartingPoint().getX() + street.getStreetWidth() > futureX + horizontalUnits) {
+					if (street.getStartingPoint().getY() < futureY
+							&& street.getStartingPoint().getY() + street.getStreetHeight() > futureY + verticalUnits) {
+						return true;
+					}
 				}
 			}
 		}

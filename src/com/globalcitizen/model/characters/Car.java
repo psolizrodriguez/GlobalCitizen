@@ -1,9 +1,11 @@
 package com.globalcitizen.model.characters;
 
 import java.awt.Graphics;
+import java.awt.Point;
+
+import javax.swing.JPanel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
-import com.globalcitizen.model.viewpercy.GlobalCitizenUtils;
 import com.shape.visitor.VisitorDraw;
 
 public class Car extends Creature {
@@ -12,13 +14,13 @@ public class Car extends Creature {
 	private String color;
 	private int movingPattern;
 
-	public Car(Street street, int x, int y) {
+	public Car(JPanel map, Street street, int x, int y) {
+		super(new Point(x, y), map, street.getDirection());
+		this.setText("X");
 
-		super(new Point(x, y));
-		this.setHorizontalUnits(40);
-		this.setVerticalUnits(40);
 		this.setCreatureType(GlobalCitizenConstants.CREATURE_TYPE_CAR);
 		this.currentStreet = street;
+		this.map = map;
 	}
 
 	public Street getCurrentStreet() {
@@ -59,15 +61,7 @@ public class Car extends Creature {
 	}
 
 	public boolean moveCar(VisitorDraw visitor) {
-		Point nextPosition = GlobalCitizenUtils.getNextLinePoint(this.currentStreet, this);
-		if (nextPosition.getX() > currentStreet.getStartingPoint().getX() + currentStreet.getStreetWidth()
-				|| nextPosition.getY() > currentStreet.getStartingPoint().getY() + currentStreet.getStreetWidth()) {
-		} else {
-			this.getCurrentPosition().setX(nextPosition.getX());
-			this.getCurrentPosition().setY(nextPosition.getY());
-		}
-		visitor.repaint();
-		return false;
+		return visitor.moveCar(this);
 	}
 
 }

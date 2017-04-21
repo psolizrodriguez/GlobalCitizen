@@ -2,6 +2,7 @@ package com.globalcitizen.model.viewpercy;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,6 @@ import javax.swing.border.LineBorder;
 
 import com.globalcitizen.model.characters.Hero;
 import com.globalcitizen.model.characters.Map;
-import com.globalcitizen.model.characters.Point;
 import com.globalcitizen.model.characters.Street;
 import com.shape.visitor.VisitorDraw;
 
@@ -41,6 +41,9 @@ public class Test1 extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	public void loadLevel1() {
+
+	}
 
 	public Test1() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,10 +64,9 @@ public class Test1 extends JFrame {
 		listStreet.add(new Street(90, new Point(450, 0), 500));
 		listStreet.add(new Street(90, new Point(650, 0), 550));
 		listStreet.add(new Street(90, new Point(850, 0), 550));
+		// Map Streets movement
+		listStreet.get(0).getStreets().add(listStreet.get(8));
 
-		Hero hero = new Hero(new Point(300, 300));
-
-		Map level_1 = new Map(listStreet, hero);
 		// Map
 
 		JPanel panel = new JPanel();
@@ -73,16 +75,19 @@ public class Test1 extends JFrame {
 		panel.setBounds(0, 0, 850, 500);
 		contentPane.add(panel);
 		panel.setLayout(null);
+		Hero hero = new Hero(new Point(300, 0), panel);
+		Map level_1 = new Map(listStreet, hero);
 
 		// Links the window to the keyboardlistenner.
 
 		ImageIcon background = new ImageIcon(this.getClass().getResource("background_edited.png"));
-		VisitorDraw label = new VisitorDraw(level_1, background);
+		VisitorDraw label = new VisitorDraw(level_1, background, null, panel);
 		label.setBounds(0, 0, 850, 500);
 		panel.add(label);
 		this.setLocationRelativeTo(null);
 
 		ThreadsController c = new ThreadsController(label);
+		label.setThreadsController(c);
 		// Let's start the game now..
 		this.addKeyListener((KeyListener) new KeyboardListener(label));
 		label.repaint();

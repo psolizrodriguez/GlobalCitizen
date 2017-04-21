@@ -3,27 +3,40 @@ package com.shape.visitor;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.event.ComponentEvent;
-import java.awt.geom.AffineTransform;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.globalcitizen.model.characters.Car;
 import com.globalcitizen.model.characters.Hero;
 import com.globalcitizen.model.characters.Map;
 import com.globalcitizen.model.characters.Street;
+import com.globalcitizen.model.viewpercy.GlobalCitizenUtils;
+import com.globalcitizen.model.viewpercy.ThreadsController;
 
 public class VisitorDraw extends JLabel {
 	Map map;
 	Rectangle heroSquare;
-	boolean mapCreated;
+	int mapCreated = 0;
 	int carRefreshRateCounter = 0;
 	int carRefreshRate = 1;
 	int carCounter = 0;
+	ThreadsController threadsController;
+	JLabel lblX;
+	JPanel mapContainer;
+
+	public ThreadsController getThreadsController() {
+		return threadsController;
+	}
+
+	public void setThreadsController(ThreadsController threadsController) {
+		this.threadsController = threadsController;
+	}
 
 	public Rectangle getHeroSquare() {
 		return heroSquare;
@@ -41,23 +54,24 @@ public class VisitorDraw extends JLabel {
 		this.map = map;
 	}
 
-	public VisitorDraw(Map map, ImageIcon background) {
+	public VisitorDraw(Map map, ImageIcon background, JLabel lblX, JPanel mapContainer) {
 		super(background);
 		this.map = map;
-
+		this.lblX = lblX;
+		this.mapContainer = mapContainer;
 	}
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// We draw the streets
-		if (!mapCreated) {
+		//if (mapCreated < 2) {
 			if (map.getStreets().size() > 0) {
 				for (Street street : map.getStreets()) {
 					street.paintComponent(g, this);
 				}
 			}
-			mapCreated = true;
-		}
+			mapCreated++;
+		//}
 		// We draw the tourist
 		map.getHero().paintComponent(g, this);
 		// We refresh the cars
@@ -74,28 +88,51 @@ public class VisitorDraw extends JLabel {
 	}
 
 	public void mainUpdateProccess() {
-		if (carCounter == 50) {
+		if (carCounter == 100) {
 			Random rand = new Random();
 			int n = rand.nextInt(map.getStreets().size());
-			map.getStreets().get(n).createCar();
+			// map.getStreets().get(n).createCar();
+			map.getStreets().get(0).createCar(this.mapContainer);
 			carCounter = 0;
 		}
 		carCounter++;
 		map.moveCarsFromStreets(this);
+		this.mapContainer.repaint();
+	}
+
+	public void touristWasHit() {
+
+		threadsController.stopTheGame();
 	}
 
 	public void onDrawStreet(Graphics g, Street street) {
 		System.out.println("Being called " + street.getStartingPoint().getX() + " " + street.getStartingPoint().getY());
 		// super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		AffineTransform oldXForm = g2d.getTransform();
+		// AffineTransform oldXForm = g2d.getTransform();
+		switch (street.getDirection()) {
+		case 2:
+			g2d.setColor(Color.ORANGE);
+			break;
+		case 3:
+			g2d.setColor(Color.GREEN);
+			break;
+		case 4:
+			g2d.setColor(Color.BLUE);
+			break;
+		default:
+			g2d.setColor(Color.WHITE);
+			break;
+		}
 
-		g2d.setColor(Color.WHITE);
-		Rectangle rectangle = new Rectangle(street.getStartingPoint().getX(), street.getStartingPoint().getY(),
+		Rectangle rectangle = new Rectangle(street.getStartingPoint().x, street.getStartingPoint().y,
 				street.getStreetWidth(), street.getStreetHeight());
-		g2d.rotate(Math.toRadians(street.getDirection()), street.getStartingPoint().getX(),
-				street.getStartingPoint().getY());
-		Shape rotatedRect = g2d.getTransform().createTransformedShape(rectangle);
+		/*
+		 * g2d.rotate(Math.toRadians(street.getDirection()),
+		 * street.getStartingPoint().getX(), street.getStartingPoint().getY());
+		 */
+		// Shape rotatedRect =
+		// g2d.getTransform().createTransformedShape(rectangle);
 		/*
 		 * Rectangle tangle = new Rectangle(0, 0, radius, radius);
 		 * g2d.translate(centerX, centerY);
@@ -106,9 +143,9 @@ public class VisitorDraw extends JLabel {
 		 * rectangle.width / 2, rectangle.getY() + rectangle.height / 2);
 		 */
 		// Draw Streets
-		// g2d.fill(rectangle);
-		street.setLogicalForm(rotatedRect);
-		g2d.setTransform(oldXForm); // Restore transform
+		g2d.fill(rectangle);
+		// street.setLogicalForm(rotatedRect);
+		// g2d.setTransform(oldXForm); // Restore transform
 
 	}
 
@@ -124,12 +161,17 @@ public class VisitorDraw extends JLabel {
 		}
 
 		g2d.setColor(Color.RED);
-		Rectangle rect2 = new Rectangle(hero.getCurrentPosition().getX(), hero.getCurrentPosition().getY(),
+		Rectangle rect2 = new Rectangle(hero.getCurrentPosition().x, hero.getCurrentPosition().y,
 				hero.getHorizontalUnits(), hero.getVerticalUnits());
+
 		// g2d.draw(rect2);
 		g2d.fill(rect2);
+		if (this.lblX != null) {
+			this.lblX.setLocation(hero.getCurrentPosition().x / 4, hero.getCurrentPosition().y / 4);
+		}
 
 		heroSquare = rect2;
+		hero.setCurrentLogicalShape(g2d.getTransform().createTransformedShape(rect2));
 	}
 
 	public void moveHero(int keycode) {
@@ -160,19 +202,38 @@ public class VisitorDraw extends JLabel {
 		this.repaint();
 	}
 
-	public void onDrawCar(Graphics g, Car car) {
-		System.out.println(
-				"Being called onDrawCar " + car.getCurrentPosition().getX() + " " + car.getCurrentPosition().getY());
-		Graphics2D g2d = (Graphics2D) g;
-		if (car.getPreviousSquare() != null) {
-			g2d.clearRect(car.getPreviousSquare().x, car.getPreviousSquare().y, car.getPreviousSquare().width,
-					car.getPreviousSquare().height);
+	public boolean moveCar(Car car) {
+		Point nextPosition = GlobalCitizenUtils.getNextLinePoint(car.getCurrentStreet(), car);
+		// Check if we hit the tourist
+		if (GlobalCitizenUtils.isTouristOnWay(map.getHero(), car, nextPosition)) {
+			touristWasHit();
+		} else {
+			// We check if the car has connected streets to the one it is
+			// currently navigating
+			if (nextPosition.getX() > car.getCurrentStreet().getStartingPoint().getX()
+					+ car.getCurrentStreet().getStreetWidth()
+					|| nextPosition.getY() > car.getCurrentStreet().getStartingPoint().getY()
+							+ car.getCurrentStreet().getStreetWidth()) {
+				if (car.getCurrentStreet().getStreets().size() > 0) {
+					Random rand = new Random();
+					// We get the total streets number connected to that street
+					// and generate a random number for the car to follow
+					int n = rand.nextInt(car.getCurrentStreet().getStreets().size());
+					// We position the car inside of the new street
+					car.getCurrentStreet().getStreets().get(n).createCar(this.mapContainer);
+				}
+			} else {
+				car.getCurrentPosition().x = nextPosition.x;
+				car.getCurrentPosition().y = nextPosition.y;
+			}
 		}
-		g2d.setColor(Color.BLUE);
-		Rectangle rect2 = new Rectangle(car.getCurrentPosition().getX(), car.getCurrentPosition().getY(),
-				car.getHorizontalUnits(), car.getVerticalUnits());
-		g2d.fill(rect2);
-		car.setPreviousSquare(rect2);
+		car.setLocation(nextPosition.x, nextPosition.y);
+		return false;
+	}
+
+	public void onDrawCar(Graphics g, Car car) {
+		System.out.println("moving car");
+		car.setLocation(car.getCurrentPosition().x, car.getCurrentPosition().y);
 	}
 
 	public void addComponentListener(ComponentEvent componentAdapter) {
