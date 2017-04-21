@@ -109,7 +109,7 @@ public class frmMain {
 
 		JPanel panel_1 = new JPanel();
 		Hero hero = new Hero(new Point(300, 10), panel_1);
-
+//test 
 		Map level_1 = new Map(listStreet, hero);
 		scrollPane.setColumnHeaderView(panel_1);
 		VisitorDraw label = new VisitorDraw(level_1, background, lblX, panel_1);
