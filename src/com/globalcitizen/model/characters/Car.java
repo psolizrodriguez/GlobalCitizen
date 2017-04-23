@@ -3,7 +3,7 @@ package com.globalcitizen.model.characters;
 import java.awt.Graphics;
 import java.awt.Point;
 
-import javax.swing.JPanel;
+import javax.swing.JLabel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
 import com.shape.visitor.VisitorDraw;
@@ -14,8 +14,8 @@ public class Car extends Creature {
 	private String color;
 	private int movingPattern;
 
-	public Car(JPanel map, Street street, int x, int y) {
-		super(new Point(x, y), map, street.getDirection());
+	public Car(JLabel map, Street street, int x, int y) {
+		super(new Point(x, y), map, street.getDirection(), GlobalCitizenConstants.CREATURE_TYPE_CAR);
 		this.setText("X");
 
 		this.setCreatureType(GlobalCitizenConstants.CREATURE_TYPE_CAR);

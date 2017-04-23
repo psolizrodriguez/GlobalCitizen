@@ -14,15 +14,31 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
-import com.globalcitizen.model.characters.Hero;
-import com.globalcitizen.model.characters.Map;
 import com.globalcitizen.model.characters.Street;
 import com.shape.visitor.VisitorDraw;
 
 public class frmMain {
 
 	private JFrame frame;
+	JScrollPane scrollPane;
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(JFrame frame) {
+		this.frame = frame;
+	}
+
+	public JScrollPane getScrollPane() {
+		return scrollPane;
+	}
+
+	public void setScrollPane(JScrollPane scrollPane) {
+		this.scrollPane = scrollPane;
+	}
 
 	/**
 	 * Launch the application.
@@ -53,13 +69,13 @@ public class frmMain {
 	private void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
-		frame.setBounds(100, 100, 1260, 780);
+		frame.setBounds(100, 100, 1260, 895);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.LIGHT_GRAY);
-		panel.setBounds(12, 13, 331, 550);
+		panel.setBounds(12, 13, 331, 665);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
@@ -76,21 +92,31 @@ public class frmMain {
 		// Code for adding the level 1
 		// Map Load
 		List<Street> listStreet = new ArrayList<>();
-		listStreet.add(new Street(1, new Point(0, 0), 250));
-		listStreet.add(new Street(3, new Point(0, 150), 250));
-		listStreet.add(new Street(1, new Point(200, 0), 250));
+		listStreet.add(new Street(1, new Point(0, 0), 850));
+		listStreet.add(new Street(3, new Point(0, 150), 850));
+		listStreet.add(new Street(1, new Point(0, 300), 850));
+		listStreet.add(new Street(3, new Point(0, 450), 850));
+		listStreet.add(new Street(1, new Point(0, 600), 850));
+		listStreet.add(new Street(3, new Point(0, 750), 850));
+		listStreet.add(new Street(1, new Point(0, 900), 850));
+		listStreet.add(new Street(1, new Point(0, 1050), 850));
+		listStreet.add(new Street(1, new Point(0, 1200), 850));
 		// listStreet.add(new Street(1, new Point(0, 450), 850));
-		listStreet.add(new Street(2, new Point(0, 0), 200));
-		listStreet.add(new Street(4, new Point(200, 0), 200));
-		//listStreet.add(new Street(2, new Point(400, 0), 200));
-		listStreet.add(new Street(3, new Point(200, 150), 250));
+		listStreet.add(new Street(2, new Point(0, 0), 1250));
+		listStreet.add(new Street(4, new Point(200, 0), 1250));
+		listStreet.add(new Street(2, new Point(400, 0), 1250));
+		listStreet.add(new Street(4, new Point(600, 0), 1250));
+		listStreet.add(new Street(2, new Point(800, 0), 1250));
+
+		listStreet.get(4).setHasToChangeView(true);
+
 		/*
 		 * listStreet.add(new Street(90, new Point(450, 0), 500));
 		 * listStreet.add(new Street(90, new Point(650, 0), 550));
 		 * listStreet.add(new Street(90, new Point(850, 0), 550));
 		 */
 		// Map Streets movement
-		listStreet.get(0).getStreets().add(listStreet.get(1));
+		// listStreet.get(0).getStreets().add(listStreet.get(1));
 
 		// Links the window to the keyboardlistenner.
 
@@ -100,33 +126,37 @@ public class frmMain {
 
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(Color.GREEN);
-		panel_3.setBounds(895, 576, 331, 144);
+		panel_3.setBounds(895, 691, 331, 144);
 		frame.getContentPane().add(panel_3);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(355, 13, 871, 550);
-		frame.getContentPane().add(scrollPane);
-
 		JPanel panel_1 = new JPanel();
-		Hero hero = new Hero(new Point(300, 10), panel_1);
-//test 
-		Map level_1 = new Map(listStreet, hero);
-		scrollPane.setColumnHeaderView(panel_1);
-		VisitorDraw label = new VisitorDraw(level_1, background, lblX, panel_1);
-		label.setBounds(8, 5, 852, 501);
-		panel_1.setPreferredSize(new Dimension(850, 1000));
+
+		// test
+		VisitorDraw label = new VisitorDraw(listStreet, new Point(0, 500), background, lblX, panel_1, this);
+		label.setIcon(
+				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/background_extended.png")));
+		label.setBounds(0, 0, 850, 1250);
+		panel_1.setPreferredSize(new Dimension(850, 1250));
 		panel_1.setLayout(null);
 		panel_1.add(label);
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(Color.YELLOW);
-		panel_2.setBounds(12, 576, 871, 144);
+		panel_2.setBounds(12, 691, 871, 144);
 
 		frame.getContentPane().add(panel_2);
 		panel_2.setLayout(null);
-		
+
+		scrollPane = new JScrollPane(panel_1);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(355, 13, 852, 653);
+		frame.getContentPane().add(scrollPane);
+		listStreet.get(1).createCar(label);
+
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/landmarks_background.png")));
+		lblNewLabel.setIcon(new ImageIcon(
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/landmarks_background.png")));
 		lblNewLabel.setBounds(12, 13, 847, 118);
 		panel_2.add(lblNewLabel);
 		panel_4.setSize(new Dimension(label.getWidth() / 4, label.getHeight() / 4));

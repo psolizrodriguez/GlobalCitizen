@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
+import javax.swing.JLabel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
 import com.shape.visitor.VisitorDraw;
@@ -19,6 +19,15 @@ public class Street {
 	int leftSideWalkSize;
 	List<Car> listCars;
 	List<Street> streets;
+	boolean hasToChangeView;
+
+	public boolean isHasToChangeView() {
+		return hasToChangeView;
+	}
+
+	public void setHasToChangeView(boolean hasToChangeView) {
+		this.hasToChangeView = hasToChangeView;
+	}
 
 	public List<Street> getStreets() {
 		return streets;
@@ -104,20 +113,26 @@ public class Street {
 		this.leftSideWalkSize = leftSideWalkSize;
 	}
 
-	public Car createCar(JPanel map) {
+	public Car createCar(JLabel map) {
 		int initial_x = this.getStartingPoint().x;
 		int initial_y = this.getStartingPoint().y;
 
 		switch (this.getDirection()) {
 		case 2:
+			initial_y = this.getStartingPoint().y - GlobalCitizenConstants.CAR_WIDTH;
+			initial_x = initial_x + GlobalCitizenConstants.SIDE_WIDTH;
 			break;
 		case 3:
-			initial_x = this.getStartingPoint().x + this.getStreetWidth() - GlobalCitizenConstants.CAR_WIDTH;
+			initial_x = this.getStartingPoint().x + this.getStreetWidth();
+			initial_y = initial_y + GlobalCitizenConstants.SIDE_WIDTH;
 			break;
 		case 4:
-			initial_y = this.getStartingPoint().y + this.getStreetHeight() - GlobalCitizenConstants.CAR_WIDTH;
+			initial_y = this.getStartingPoint().y + this.getStreetHeight();
+			initial_x = initial_x + GlobalCitizenConstants.SIDE_WIDTH;
 			break;
 		default:
+			initial_x = this.getStartingPoint().x - GlobalCitizenConstants.CAR_WIDTH;
+			initial_y = initial_y + GlobalCitizenConstants.SIDE_WIDTH;
 			break;
 		}
 		Car car = new Car(map, this, initial_x, initial_y);
@@ -126,9 +141,13 @@ public class Street {
 	}
 
 	public boolean moveCars(VisitorDraw visitor) {
+		//System.out.println("street cars = " + listCars.size());
 		if (listCars != null && listCars.size() > 0) {
 			for (Car car : listCars) {
-				car.moveCar(visitor);
+				if (!car.moveCar(visitor)) {
+					listCars.remove(car);
+					return false;
+				}
 			}
 		} else {
 			return false;

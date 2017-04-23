@@ -6,13 +6,17 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
 import com.shape.visitor.VisitorDraw;
 
 public abstract class Creature extends JLabel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<Inventory> listInventory;
 	private List<CreatureBehavior> listCreatureBehavior;
 	private int movementSpeed;
@@ -26,7 +30,7 @@ public abstract class Creature extends JLabel {
 	private Rectangle previousSquare;
 	private Rectangle currentSquare;
 	private Shape currentLogicalShape;
-	JPanel map;
+	JLabel map;
 
 	public Shape getCurrentLogicalShape() {
 		return currentLogicalShape;
@@ -52,18 +56,39 @@ public abstract class Creature extends JLabel {
 		this.previousSquare = previousSquare;
 	}
 
-	public Creature(Point currentPosition, JPanel map, int streetDirection) {
+	/**
+	 * @param creatureType
+	 *            1 Hero, 2 ambulance
+	 **/
+	public Creature(Point currentPosition, JLabel map, int streetDirection, int creatureType) {
+		super();
 		this.currentPosition = currentPosition;
 		this.map = map;
-		if (streetDirection == 2 || streetDirection == 4) {
-			this.setHorizontalUnits(GlobalCitizenConstants.CAR_HEIGHT);
-			this.setVerticalUnits(GlobalCitizenConstants.CAR_WIDTH);
+		ImageIcon background;
+		if (creatureType == 1) {
+			/*
+			 * background = new ImageIcon( this.getClass().getResource(
+			 * "/com/globalcitizen/model/viewpercy/Ambulance.png"));
+			 */
+			this.setText("");
+			//this.setIcon(new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/v_01.png")));
+			this.setHorizontalUnits(GlobalCitizenConstants.HERO_WIDTH);
+			this.setVerticalUnits(GlobalCitizenConstants.HERO_HEIGHT);
 		} else {
-			this.setHorizontalUnits(GlobalCitizenConstants.CAR_WIDTH);
-			this.setVerticalUnits(GlobalCitizenConstants.CAR_HEIGHT);
+			if (streetDirection == 2 || streetDirection == 4) {
+				this.setHorizontalUnits(GlobalCitizenConstants.CAR_HEIGHT);
+				this.setVerticalUnits(GlobalCitizenConstants.CAR_WIDTH);
+			} else {
+				this.setHorizontalUnits(GlobalCitizenConstants.CAR_WIDTH);
+				this.setVerticalUnits(GlobalCitizenConstants.CAR_HEIGHT);
+			}
+			background = new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/Ambulance.png"));
+			this.setIcon(background);
 		}
-		map.setBounds(currentPosition.x, currentPosition.y, this.horizontalUnits, this.verticalUnits);
+		this.setBounds(currentPosition.x, currentPosition.y, this.horizontalUnits, this.verticalUnits);
+		// this.setIcon(background);
 		map.add(this);
+
 	}
 
 	public int getCreatureType() {
@@ -149,16 +174,35 @@ public abstract class Creature extends JLabel {
 	public boolean iscreatureInsideOfStreets(List<Street> listStreets, int futureX, int futureY) {
 		if (listStreets != null && listStreets.size() > 0) {
 			for (Street street : listStreets) {
-				if (street.getStartingPoint().getX() < futureX
-						&& street.getStartingPoint().getX() + street.getStreetWidth() > futureX + horizontalUnits) {
-					if (street.getStartingPoint().getY() < futureY
-							&& street.getStartingPoint().getY() + street.getStreetHeight() > futureY + verticalUnits) {
+				if (street.getStartingPoint().getX() <= futureX
+						&& street.getStartingPoint().getX() + street.getStreetWidth() >= futureX + horizontalUnits) {
+					if (street.getStartingPoint().getY() <= futureY
+							&& street.getStartingPoint().getY() + street.getStreetHeight() >= futureY + verticalUnits) {
 						return true;
 					}
 				}
 			}
 		}
 		return false;
+	}
+
+	public int moveScroll(List<Street> listStreets, int currentMapPiece) {
+		if (listStreets != null && listStreets.size() > 0) {
+			for (Street street : listStreets) {
+				if (street.isHasToChangeView()) {
+					if (currentPosition.y + this.getHeight() > street.getStartingPoint().getY()
+							+ street.getStreetHeight() && currentMapPiece == 1) {
+						return 2;
+					} else {
+						if (currentPosition.y < street.getStartingPoint().getY() && currentMapPiece == 2) {
+							return 1;
+						}
+					}
+				}
+
+			}
+		}
+		return 0;
 	}
 
 	public abstract void paintComponent(Graphics g, VisitorDraw visitor);
