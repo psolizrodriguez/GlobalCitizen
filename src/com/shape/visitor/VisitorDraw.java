@@ -21,19 +21,16 @@ import com.globalcitizen.model.viewpercy.GlobalCitizenUtils;
 import com.globalcitizen.model.viewpercy.ThreadsController;
 
 public class VisitorDraw extends Visitor {
-	
-	
+
 	public void onDrawHero(Graphics g, Hero hero) {
 		hero.setLocation(hero.getCurrentPosition().x, hero.getCurrentPosition().y);
 		lblX.setLocation(hero.getCurrentPosition().x / 4, hero.getCurrentPosition().y / 4);
 	}
-	
+
 	public void onDrawCar(Graphics g, Car car) {
 		car.setLocation(car.getCurrentPosition().x, car.getCurrentPosition().y);
 	}
-	
-	
-	
+
 	Map map;
 	Rectangle heroSquare;
 	int mapCreated = 0;
@@ -92,13 +89,10 @@ public class VisitorDraw extends Visitor {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// We draw the streets
-		if (mapCreated < 2) {
-			if (map.getStreets().size() > 0) {
-				for (Street street : map.getStreets()) {
-					street.paintComponent(g, this);
-				}
+		if (map.getStreets().size() > 0) {
+			for (Street street : map.getStreets()) {
+				street.paintComponent(g, this);
 			}
-			mapCreated++;
 		}
 		// We draw the tourist
 		if (heroMoved) {
@@ -169,51 +163,21 @@ public class VisitorDraw extends Visitor {
 	}
 
 	public void onDrawStreet(Graphics g, Street street) {
-		// System.out.println("Being called " + street.getStartingPoint().getX()
-		// + " " + street.getStartingPoint().getY());
-		// super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		// AffineTransform oldXForm = g2d.getTransform();
-		switch (street.getDirection()) {
-		case 2:
-			g2d.setColor(Color.ORANGE);
-			break;
-		case 3:
-			g2d.setColor(Color.GREEN);
-			break;
-		case 4:
-			g2d.setColor(Color.BLUE);
-			break;
-		default:
-			g2d.setColor(Color.WHITE);
-			break;
+		/*
+		 * switch (street.getDirection()) { case 2: g2d.setColor(Color.ORANGE);
+		 * break; case 3: g2d.setColor(Color.GREEN); break; case 4:
+		 * g2d.setColor(Color.BLUE); break; default: g2d.setColor(Color.WHITE);
+		 * break; }
+		 */
+
+		if (street.isLandmark()) {
+			g2d.setColor(Color.YELLOW);
+			Rectangle rectangle = new Rectangle(street.getStartingPoint().x, street.getStartingPoint().y,
+					street.getStreetWidth(), street.getStreetHeight());
+			g2d.fill(rectangle);
 		}
-
-		Rectangle rectangle = new Rectangle(street.getStartingPoint().x, street.getStartingPoint().y,
-				street.getStreetWidth(), street.getStreetHeight());
-		/*
-		 * g2d.rotate(Math.toRadians(street.getDirection()),
-		 * street.getStartingPoint().getX(), street.getStartingPoint().getY());
-		 */
-		// Shape rotatedRect =
-		// g2d.getTransform().createTransformedShape(rectangle);
-		/*
-		 * Rectangle tangle = new Rectangle(0, 0, radius, radius);
-		 * g2d.translate(centerX, centerY);
-		 */
-
-		/*
-		 * g2d.rotate(Math.toRadians(street.getDirection()), rectangle.getX() +
-		 * rectangle.width / 2, rectangle.getY() + rectangle.height / 2);
-		 */
-		// Draw Streets
-		// g2d.fill(rectangle);
-		// street.setLogicalForm(rotatedRect);
-		// g2d.setTransform(oldXForm); // Restore transform
-
 	}
-
-
 
 	public void moveHero(int keycode) {
 
@@ -302,8 +266,6 @@ public class VisitorDraw extends Visitor {
 		}
 		return true;
 	}
-
-
 
 	public void addComponentListener(ComponentEvent componentAdapter) {
 		this.repaint();

@@ -21,6 +21,15 @@ public class Street {
 	List<Car> listCars;
 	List<Street> streets;
 	boolean hasToChangeView;
+	boolean landmark;
+
+	public boolean isLandmark() {
+		return landmark;
+	}
+
+	public void setLandmark(boolean landmark) {
+		this.landmark = landmark;
+	}
 
 	public boolean isHasToChangeView() {
 		return hasToChangeView;

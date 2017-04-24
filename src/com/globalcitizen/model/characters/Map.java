@@ -5,7 +5,6 @@ import java.util.List;
 import com.shape.visitor.VisitorDraw;
 
 public class Map {
-	List<Landmarks> landmarks;
 	List<Street> streets;
 	List<Creature> creatures;
 	List<Buildings> buildings;
@@ -30,14 +29,6 @@ public class Map {
 
 	public void setBuildings(List<Buildings> buildings) {
 		this.buildings = buildings;
-	}
-
-	public List<Landmarks> getLandmarks() {
-		return landmarks;
-	}
-
-	public void setLandmarks(List<Landmarks> landmarks) {
-		this.landmarks = landmarks;
 	}
 
 	public List<Street> getStreets() {
