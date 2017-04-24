@@ -1,14 +1,14 @@
 package com.globalcitizen.model.viewpercy;
 
-import com.shape.visitor.VisitorDraw;
+import com.shape.visitor.Visitor;
 
 //Controls all the game logic .. most important class in this project.
 public class ThreadsController extends Thread {
 	long speed = 50;
-	VisitorDraw visitorDraw;
+	Visitor visitorDraw;
 
 	// Constructor of ControlleurThread
-	ThreadsController(VisitorDraw visitorDraw) {
+	ThreadsController(Visitor visitorDraw) {
 		this.visitorDraw = visitorDraw;
 	}
 
@@ -16,7 +16,7 @@ public class ThreadsController extends Thread {
 	public void run() {
 		while (true) {
 			visitorDraw.mainUpdateProccess();
-			
+
 			pauser();
 		}
 	}

@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
-import com.shape.visitor.VisitorDraw;
+import com.shape.visitor.Visitor;
 
 public abstract class Creature extends JLabel {
 	/**
@@ -205,6 +205,6 @@ public abstract class Creature extends JLabel {
 		return 0;
 	}
 
-	public abstract void paintComponent(Graphics g, VisitorDraw visitor);
+	public abstract void paintComponent(Graphics g, Visitor visitor);
 
 }

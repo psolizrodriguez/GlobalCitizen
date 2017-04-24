@@ -3,13 +3,13 @@ package com.globalcitizen.model.viewpercy;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import com.shape.visitor.VisitorDraw;
+import com.shape.visitor.Visitor;
 
 public class KeyboardListener extends KeyAdapter {
 
-	VisitorDraw visitorDraw;
+	Visitor visitorDraw;
 
-	public KeyboardListener(VisitorDraw visitorDraw) {
+	public KeyboardListener(Visitor visitorDraw) {
 		this.visitorDraw = visitorDraw;
 	}
 

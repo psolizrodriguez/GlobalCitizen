@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.JLabel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
+import com.shape.visitor.Visitor;
 import com.shape.visitor.VisitorDraw;
 
 public class Street {
@@ -69,7 +70,7 @@ public class Street {
 		this.streetHeight = streetHeight;
 	}
 
-	public void paintComponent(Graphics g, VisitorDraw visitor) {
+	public void paintComponent(Graphics g, Visitor visitor) {
 		visitor.onDrawStreet(g, this);
 	}
 
@@ -141,7 +142,7 @@ public class Street {
 	}
 
 	public boolean moveCars(VisitorDraw visitor) {
-		//System.out.println("street cars = " + listCars.size());
+		// System.out.println("street cars = " + listCars.size());
 		if (listCars != null && listCars.size() > 0) {
 			for (Car car : listCars) {
 				if (!car.moveCar(visitor)) {

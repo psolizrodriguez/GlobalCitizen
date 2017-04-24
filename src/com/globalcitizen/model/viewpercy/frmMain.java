@@ -16,13 +16,25 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import com.globalcitizen.model.characters.Creature;
 import com.globalcitizen.model.characters.Street;
+import com.shape.visitor.Visitor;
 import com.shape.visitor.VisitorDraw;
 
 public class frmMain {
 
 	private JFrame frame;
 	JScrollPane scrollPane;
+	Visitor mapLevel1;
+	Creature hero;
+
+	public Creature getHero() {
+		return hero;
+	}
+
+	public void setHero(Creature hero) {
+		this.hero = hero;
+	}
 
 	public JFrame getFrame() {
 		return frame;
@@ -132,13 +144,13 @@ public class frmMain {
 		JPanel panel_1 = new JPanel();
 
 		// test
-		VisitorDraw label = new VisitorDraw(listStreet, new Point(0, 500), background, lblX, panel_1, this);
-		label.setIcon(
+		mapLevel1 = new VisitorDraw(listStreet, new Point(0, 500), background, lblX);
+		mapLevel1.setIcon(
 				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/background_extended.png")));
-		label.setBounds(0, 0, 850, 1250);
+		mapLevel1.setBounds(0, 0, 850, 1250);
 		panel_1.setPreferredSize(new Dimension(850, 1250));
 		panel_1.setLayout(null);
-		panel_1.add(label);
+		panel_1.add(mapLevel1);
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(Color.YELLOW);
@@ -152,19 +164,21 @@ public class frmMain {
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		scrollPane.setBounds(355, 13, 852, 653);
 		frame.getContentPane().add(scrollPane);
-		listStreet.get(1).createCar(label);
+		listStreet.get(1).createCar(mapLevel1);
+		setHero(mapLevel1.getHero());
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(
 				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/landmarks_background.png")));
 		lblNewLabel.setBounds(12, 13, 847, 118);
 		panel_2.add(lblNewLabel);
-		panel_4.setSize(new Dimension(label.getWidth() / 4, label.getHeight() / 4));
-		ThreadsController c = new ThreadsController(label);
-		label.setThreadsController(c);
+		panel_4.setSize(new Dimension(mapLevel1.getWidth() / 4, mapLevel1.getHeight() / 4));
+		ThreadsController c = new ThreadsController(mapLevel1);
+		mapLevel1.setThreadsController(c);
 		// Let's start the game now..
-		frame.addKeyListener((KeyListener) new KeyboardListener(label));
-		label.repaint();
+		frame.addKeyListener((KeyListener) new KeyboardListener(mapLevel1));
+		mapLevel1.setScrollPane(scrollPane);
+		mapLevel1.repaint();
 		c.start();
 	}
 }

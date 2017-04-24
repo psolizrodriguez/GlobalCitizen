@@ -11,7 +11,7 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import com.globalcitizen.model.characters.Car;
 import com.globalcitizen.model.characters.Hero;
@@ -19,9 +19,21 @@ import com.globalcitizen.model.characters.Map;
 import com.globalcitizen.model.characters.Street;
 import com.globalcitizen.model.viewpercy.GlobalCitizenUtils;
 import com.globalcitizen.model.viewpercy.ThreadsController;
-import com.globalcitizen.model.viewpercy.frmMain;
 
-public class VisitorDraw extends JLabel {
+public class VisitorDraw extends Visitor {
+	
+	
+	public void onDrawHero(Graphics g, Hero hero) {
+		hero.setLocation(hero.getCurrentPosition().x, hero.getCurrentPosition().y);
+		lblX.setLocation(hero.getCurrentPosition().x / 4, hero.getCurrentPosition().y / 4);
+	}
+	
+	public void onDrawCar(Graphics g, Car car) {
+		car.setLocation(car.getCurrentPosition().x, car.getCurrentPosition().y);
+	}
+	
+	
+	
 	Map map;
 	Rectangle heroSquare;
 	int mapCreated = 0;
@@ -30,14 +42,12 @@ public class VisitorDraw extends JLabel {
 	int carCounter = 0;
 	ThreadsController threadsController;
 	JLabel lblX;
-	JPanel mapContainer;
-	Hero hero;
 	int currentMapPiece = 1;
 	boolean heroMoved = false;
-	frmMain mainContainer;
 	boolean triggerAnimationUp;
 	boolean triggerAnimationDown;
 	boolean carsMoving;
+	JScrollPane scrollPane;
 
 	public ThreadsController getThreadsController() {
 		return threadsController;
@@ -63,17 +73,20 @@ public class VisitorDraw extends JLabel {
 		this.map = map;
 	}
 
-	public VisitorDraw(List<Street> streets, Point heroStartingPoint, ImageIcon background, JLabel lblX,
-			JPanel mapContainer, frmMain mainContainer) {
+	public VisitorDraw(List<Street> streets, Point heroStartingPoint, ImageIcon background, JLabel lblX) {
 		super(background);
-		this.hero = new Hero(heroStartingPoint, this);
-
-		this.map = new Map(streets, hero);
+		this.map = new Map(streets, new Hero(heroStartingPoint, this));
 		this.lblX = lblX;
 		lblX.setLocation(heroStartingPoint.x / 4, heroStartingPoint.y / 4);
-		this.mapContainer = mapContainer;
-		this.mainContainer = mainContainer;
 		this.carsMoving = true;
+	}
+
+	public JScrollPane getScrollPane() {
+		return scrollPane;
+	}
+
+	public void setScrollPane(JScrollPane scrollPane) {
+		this.scrollPane = scrollPane;
 	}
 
 	public void paintComponent(Graphics g) {
@@ -119,18 +132,15 @@ public class VisitorDraw extends JLabel {
 			map.moveCarsFromStreets(this);
 		}
 		if (triggerAnimationDown) {
-			System.out.println("calling trigger down" + mainContainer.getScrollPane().getVerticalScrollBar().getValue()
-					+ " vs " + mainContainer.getScrollPane().getVerticalScrollBar().getMaximum());
-			if (mainContainer.getScrollPane().getVerticalScrollBar()
-					.getValue() < mainContainer.getScrollPane().getVerticalScrollBar().getMaximum() / 2) {
-				if (mainContainer.getScrollPane().getVerticalScrollBar().getValue()
-						+ 50 >= mainContainer.getScrollPane().getVerticalScrollBar().getMaximum() / 2) {
+			System.out.println("calling trigger down" + scrollPane.getVerticalScrollBar().getValue() + " vs "
+					+ scrollPane.getVerticalScrollBar().getMaximum());
+			if (scrollPane.getVerticalScrollBar().getValue() < scrollPane.getVerticalScrollBar().getMaximum() / 2) {
+				if (scrollPane.getVerticalScrollBar().getValue() + 50 >= scrollPane.getVerticalScrollBar().getMaximum()
+						/ 2) {
 					triggerAnimationDown = false;
-					mainContainer.getScrollPane().getVerticalScrollBar()
-							.setValue(mainContainer.getScrollPane().getVerticalScrollBar().getMaximum());
+					scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
 				} else {
-					mainContainer.getScrollPane().getVerticalScrollBar()
-							.setValue(mainContainer.getScrollPane().getVerticalScrollBar().getValue() + 50);
+					scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getValue() + 50);
 				}
 
 			}
@@ -138,17 +148,19 @@ public class VisitorDraw extends JLabel {
 		} else {
 			if (triggerAnimationUp) {
 				System.out.println("calling trigger up");
-				if (mainContainer.getScrollPane().getVerticalScrollBar().getValue() > 0) {
-					mainContainer.getScrollPane().getVerticalScrollBar()
-							.setValue(mainContainer.getScrollPane().getVerticalScrollBar().getValue() - 50);
+				if (scrollPane.getVerticalScrollBar().getValue() > 0) {
+					scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getValue() - 50);
 				} else {
 					triggerAnimationUp = false;
-					mainContainer.getScrollPane().getVerticalScrollBar().setValue(0);
+					scrollPane.getVerticalScrollBar().setValue(0);
 				}
 
 			}
 		}
-		this.mapContainer.repaint();
+		System.out.println("repainting scroll");
+		if (scrollPane != null) {
+			scrollPane.getParent().repaint();
+		}
 	}
 
 	public void touristWasHit() {
@@ -201,11 +213,7 @@ public class VisitorDraw extends JLabel {
 
 	}
 
-	public void onDrawHero(Graphics g, Hero hero) {
-		hero.setLocation(hero.getCurrentPosition().x, hero.getCurrentPosition().y);
-		lblX.setLocation(hero.getCurrentPosition().x / 4, hero.getCurrentPosition().y / 4);
 
-	}
 
 	public void moveHero(int keycode) {
 
@@ -217,7 +225,7 @@ public class VisitorDraw extends JLabel {
 		case 38: // -> Top
 			heroMoved = getMap().getHero().moveUp(getMap().getStreets());
 			if (heroMoved) {
-				int auxCurrentMapPiece = hero.moveScroll(map.getStreets(), currentMapPiece);
+				int auxCurrentMapPiece = getMap().getHero().moveScroll(map.getStreets(), currentMapPiece);
 				if (auxCurrentMapPiece != 0) {
 					currentMapPiece = auxCurrentMapPiece;
 					if (currentMapPiece == 1) {
@@ -237,7 +245,7 @@ public class VisitorDraw extends JLabel {
 			heroMoved = getMap().getHero().moveDown(getMap().getStreets());
 			System.out.println("bottom");
 			if (heroMoved) {
-				int auxCurrentMapPiece = hero.moveScroll(map.getStreets(), currentMapPiece);
+				int auxCurrentMapPiece = getMap().getHero().moveScroll(map.getStreets(), currentMapPiece);
 				if (auxCurrentMapPiece != 0) {
 					currentMapPiece = auxCurrentMapPiece;
 					System.out.println("currentMapPiece = " + currentMapPiece);
@@ -295,10 +303,7 @@ public class VisitorDraw extends JLabel {
 		return true;
 	}
 
-	public void onDrawCar(Graphics g, Car car) {
-		// System.out.println("moving car");
-		car.setLocation(car.getCurrentPosition().x, car.getCurrentPosition().y);
-	}
+
 
 	public void addComponentListener(ComponentEvent componentAdapter) {
 		this.repaint();

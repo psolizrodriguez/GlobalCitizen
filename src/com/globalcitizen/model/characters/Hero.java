@@ -8,9 +8,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
-import com.shape.visitor.VisitorDraw;
+import com.shape.visitor.Visitor;
 
 public class Hero extends Creature {
+
+	public void paintComponent(Graphics g, Visitor visitor) {
+		visitor.onDrawHero(g, this);
+	}
 
 	private int currentVerticalUp;
 	public final ImageIcon[] verticalUpImages = new ImageIcon[] {
@@ -135,10 +139,6 @@ public class Hero extends Creature {
 		this.setCreatureType(GlobalCitizenConstants.CREATURE_TYPE_HERO);
 		this.currentVertical = 0;
 		moveVerticalDown();
-	}
-
-	public void paintComponent(Graphics g, VisitorDraw visitor) {
-		visitor.onDrawHero(g, this);
 	}
 
 	public boolean moveRight(List<Street> listStreets) {
