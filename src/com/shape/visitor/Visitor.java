@@ -53,4 +53,6 @@ public abstract class Visitor extends JLabel {
 
 	public abstract void drawLandmarks(List<Street> streets);
 
+	public abstract void closeMinigame(boolean completed);
+
 }

@@ -71,7 +71,8 @@ public abstract class Creature extends JLabel {
 			 * "/com/globalcitizen/model/viewpercy/Ambulance.png"));
 			 */
 			this.setText("");
-			//this.setIcon(new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/v_01.png")));
+			// this.setIcon(new
+			// ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/v_01.png")));
 			this.setHorizontalUnits(GlobalCitizenConstants.HERO_WIDTH);
 			this.setVerticalUnits(GlobalCitizenConstants.HERO_HEIGHT);
 		} else {
@@ -203,6 +204,26 @@ public abstract class Creature extends JLabel {
 			}
 		}
 		return 0;
+	}
+
+	public Landmark iscreatureInsideOfLandmark(List<Street> listStreets) {
+		if (listStreets != null && listStreets.size() > 0) {
+			for (Street street : listStreets) {
+				if (street.isLandmark()) {
+					if (street.getStartingPoint().getX() <= this.getCurrentPosition().x
+							&& street.getStartingPoint().getX() + street.getStreetWidth() >= this.getCurrentPosition().x
+									+ horizontalUnits) {
+						if (street.getStartingPoint().getY() <= this.getCurrentPosition().y
+								&& street.getStartingPoint().getY()
+										+ street.getStreetHeight()/2 >= this.getCurrentPosition().y + verticalUnits) {
+							return (Landmark) street;
+						}
+					}
+				}
+
+			}
+		}
+		return null;
 	}
 
 	public abstract void paintComponent(Graphics g, Visitor visitor);

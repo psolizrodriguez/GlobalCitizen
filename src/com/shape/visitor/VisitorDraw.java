@@ -22,6 +22,7 @@ import com.globalcitizen.model.characters.Hero;
 import com.globalcitizen.model.characters.Landmark;
 import com.globalcitizen.model.characters.Map;
 import com.globalcitizen.model.characters.Street;
+import com.globalcitizen.model.puzzle.PuzzleEx;
 import com.globalcitizen.model.viewpercy.GlobalCitizenUtils;
 import com.globalcitizen.model.viewpercy.ThreadsController;
 import com.globalcitizen.model.viewpercy.frmMain;
@@ -39,7 +40,6 @@ public class VisitorDraw extends Visitor {
 
 	Map map;
 	JLabel pinPoint;
-	JLabel door;
 	Rectangle heroSquare;
 	int mapCreated = 0;
 	int carRefreshRateCounter = 0;
@@ -56,6 +56,9 @@ public class VisitorDraw extends Visitor {
 	JLabel menuItems;
 	int auxXMenulandmarks;
 	JLabel minimapPin;
+	boolean isInLandmark;
+	frmMain frmMain;
+	PuzzleEx puzzleEx;
 
 	public ThreadsController getThreadsController() {
 		return threadsController;
@@ -82,7 +85,7 @@ public class VisitorDraw extends Visitor {
 	}
 
 	public VisitorDraw(List<Street> streets, Point heroStartingPoint, ImageIcon background, JLabel lblX,
-			JLabel menuItems, JLabel minimapPin) {
+			JLabel menuItems, JLabel minimapPin, frmMain frmMain) {
 		super(background);
 		this.map = new Map(streets, new Hero(heroStartingPoint, this));
 		this.lblX = lblX;
@@ -99,14 +102,8 @@ public class VisitorDraw extends Visitor {
 		pinPoint.setOpaque(false);
 		pinPoint.setVisible(false);
 		this.add(pinPoint);
-		door = new JLabel();
-		ImageIcon iconDoor = new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/door.gif"));
-		Image scaleImageDoor = iconDoor.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
-		door.setIcon(new ImageIcon(scaleImageDoor));
-		door.setBounds(0, 0, 50, 50);
-		door.setOpaque(false);
-		door.setVisible(false);
-		this.add(door);
+
+		this.frmMain = frmMain;
 	}
 
 	public JScrollPane getScrollPane() {
@@ -202,6 +199,17 @@ public class VisitorDraw extends Visitor {
 					btnNewButton_1.setBounds(auxXMenulandmarks, 23, 135, 100);
 					menuItems.add(btnNewButton_1);
 					landmark.setButton(btnNewButton_1);
+					// Adding the door
+					JLabel door = new JLabel();
+					ImageIcon iconDoor = new ImageIcon(
+							frmMain.class.getResource("/com/globalcitizen/model/viewpercy/door.gif"));
+					Image scaleImageDoor = iconDoor.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+					door.setIcon(new ImageIcon(scaleImageDoor));
+					door.setBounds(landmark.getStartingPoint().x, landmark.getStartingPoint().y, 50, 50);
+					door.setOpaque(false);
+					door.setVisible(true);
+					this.add(door);
+					landmark.setDoor(door);
 					btnNewButton_1.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							moveLandMarkPoint(landmark);
@@ -216,9 +224,7 @@ public class VisitorDraw extends Visitor {
 
 	public void moveLandMarkPoint(Landmark landmark) {
 		pinPoint.setLocation(landmark.getStartingPoint().x, landmark.getStartingPoint().y - 50);
-		door.setLocation(landmark.getStartingPoint().x, landmark.getStartingPoint().y);
 		pinPoint.setVisible(true);
-		door.setVisible(true);
 
 		minimapPin.setLocation(pinPoint.getLocation().x / 3, pinPoint.getLocation().y / 3);
 		minimapPin.setVisible(true);
@@ -242,12 +248,29 @@ public class VisitorDraw extends Visitor {
 		}
 	}
 
+	public void executeMinigame(Landmark landmark) {
+		frmMain.panel_4.setVisible(false);
+		frmMain.panel_5.setVisible(true);
+		frmMain.panel_5.start();
+		puzzleEx = new PuzzleEx(landmark, this);
+		this.threadsController.pauseGame();
+		this.setVisible(false);
+
+	}
+
+	public void closeMinigame(boolean completed) {
+		frmMain.panel_4.setVisible(true);
+		frmMain.panel_5.setVisible(false);
+		frmMain.panel_5.stop();
+		this.setVisible(true);
+		this.threadsController.resumeGame();
+	}
+
 	public void moveHero(int keycode) {
 
 		switch (keycode) {
 		case 39: // -> Right
 			heroMoved = getMap().getHero().moveRight(getMap().getStreets());
-			System.out.println("right");
 			break;
 		case 38: // -> Top
 			heroMoved = getMap().getHero().moveUp(getMap().getStreets());
@@ -265,12 +288,10 @@ public class VisitorDraw extends Visitor {
 
 		case 37: // -> Left
 			heroMoved = getMap().getHero().moveLeft(getMap().getStreets());
-			System.out.println("left");
 			break;
 
 		case 40: // -> Bottom
 			heroMoved = getMap().getHero().moveDown(getMap().getStreets());
-			System.out.println("bottom");
 			if (heroMoved) {
 				int auxCurrentMapPiece = getMap().getHero().moveScroll(map.getStreets(), currentMapPiece);
 				if (auxCurrentMapPiece != 0) {
@@ -285,6 +306,23 @@ public class VisitorDraw extends Visitor {
 
 		default:
 			break;
+		}
+
+		// Check if hero is inside of landmark
+		Landmark auxLandmark = getMap().getHero().iscreatureInsideOfLandmark(getMap().getStreets());
+		if (auxLandmark != null) {
+			if (!isInLandmark) {
+				System.out.println("is in Landmark");
+				executeMinigame(auxLandmark);
+				isInLandmark = true;
+			}
+		} else {
+			if (isInLandmark) {
+				isInLandmark = false;
+				System.out.println("is out Landmark");
+				closeMinigame(false);
+			}
+
 		}
 		this.repaint();
 	}

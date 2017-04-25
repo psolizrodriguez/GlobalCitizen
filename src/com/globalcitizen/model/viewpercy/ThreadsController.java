@@ -6,6 +6,7 @@ import com.shape.visitor.Visitor;
 public class ThreadsController extends Thread {
 	long speed = 30;
 	Visitor visitorDraw;
+	boolean pauseGame;
 
 	// Constructor of ControlleurThread
 	ThreadsController(Visitor visitorDraw) {
@@ -17,25 +18,25 @@ public class ThreadsController extends Thread {
 		while (true) {
 			visitorDraw.mainUpdateProccess();
 
-			pauser();
+			try {
+				while (pauseGame) {
+					sleep(speed);
+				}
+				sleep(speed);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 	// delay between each move
-	public void pauser() {
-		try {
-			sleep(speed);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+	public void pauseGame() {
+		pauseGame = true;
 	}
 
-	// Stops The Game
-	public void stopTheGame() {
-
-		while (true) {
-			pauser();
-		}
+	public void resumeGame() {
+		pauseGame = false;
 	}
 
 }

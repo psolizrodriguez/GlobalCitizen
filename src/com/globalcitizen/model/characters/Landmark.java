@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 
 public class Landmark extends Street {
 	ImageIcon mapImage;
@@ -11,6 +12,33 @@ public class Landmark extends Street {
 	int secondsToComplete;
 	int secondsToWinChallenge;
 	JButton button;
+	String landmarkImage;
+	String name;
+	JLabel door;
+
+	public JLabel getDoor() {
+		return door;
+	}
+
+	public void setDoor(JLabel door) {
+		this.door = door;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLandmarkImage() {
+		return landmarkImage;
+	}
+
+	public void setLandmarkImage(String landmarkImage) {
+		this.landmarkImage = landmarkImage;
+	}
 
 	public JButton getButton() {
 		return button;
@@ -20,8 +48,8 @@ public class Landmark extends Street {
 		this.button = button;
 	}
 
-	public Landmark(int direction, Point startingPoint, int streetWidth, ImageIcon mapImage, ImageIcon menuImage,
-			int secondsToComplete, int secondsToWinChallenge) {
+	public Landmark(String name, int direction, Point startingPoint, int streetWidth, ImageIcon mapImage,
+			ImageIcon menuImage, int secondsToComplete, int secondsToWinChallenge, String landmarkImage) {
 
 		super(direction, startingPoint, streetWidth);
 		this.mapImage = mapImage;
@@ -29,6 +57,8 @@ public class Landmark extends Street {
 		this.secondsToComplete = secondsToComplete;
 		this.secondsToWinChallenge = secondsToWinChallenge;
 		this.landmark = true;
+		this.landmarkImage = landmarkImage;
+		this.name = name;
 	}
 
 	public ImageIcon getMapImage() {

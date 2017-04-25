@@ -3,7 +3,6 @@ package com.globalcitizen.model.viewpercy;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -31,7 +30,9 @@ public class frmMain {
 	JScrollPane scrollPane;
 	Visitor mapLevel1;
 	Creature hero;
-	JPanel panel_2;
+	public JPanel panel_2;
+	public DigitalWatch panel_5;
+	public JPanel panel_4;
 
 	public Creature getHero() {
 		return hero;
@@ -100,14 +101,18 @@ public class frmMain {
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
-		JPanel panel_4 = new JPanel();
-		panel_4.setBounds(25, 132, 266, 383);
+		panel_4 = new JPanel();
+		panel_4.setBounds(25, 131, 266, 383);
 		panel.add(panel_4);
 		panel_4.setLayout(null);
 
-		JLabel lblX = new JLabel("X");
-		lblX.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblX.setBounds(100, 29, 14, 16);
+		JLabel lblX = new JLabel();
+
+		lblX.setBounds(100, 29, 20, 20);
+		ImageIcon iconMinimapX = new ImageIcon(
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/you_are_here.png"));
+		Image scaleImageMinimapX = iconMinimapX.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+		lblX.setIcon(new ImageIcon(scaleImageMinimapX));
 		panel_4.add(lblX);
 
 		// Code for adding the level 1
@@ -134,9 +139,18 @@ public class frmMain {
 		ImageIcon zooIcon = new ImageIcon(this.getClass().getResource("philiZooIcon.png"));
 		ImageIcon zoo = new ImageIcon(this.getClass().getResource("philiZoo.jpg"));
 		// Now we add the landmarks
-		listStreet.add(new Landmark(2, new Point(500, 250), 100, zooIcon, zoo, 60, 30));
-		listStreet.add(new Landmark(2, new Point(100, 850), 100, zooIcon, zoo, 60, 30));
-		listStreet.add(new Landmark(3, new Point(100, 400), 100, zooIcon, zoo, 60, 30));
+		listStreet.add(
+				new Landmark("Philadelphia Zoo", 2, new Point(500, 250), 100, zooIcon, zoo, 60, 30, "objective_4.jpg"));
+		listStreet.add(
+				new Landmark("Rocky Statue", 2, new Point(100, 850), 100, zooIcon, zoo, 60, 30, "objective_5.jpg"));
+		listStreet.add(
+				new Landmark("Liberty Bell", 2, new Point(300, 550), 100, zooIcon, zoo, 60, 30, "objective_3.jpg"));
+		listStreet.add(
+				new Landmark("Frankiln Institute", 2, new Point(700, 1000), 100, zooIcon, zoo, 60, 30, "objective_1.jpg"));
+		listStreet.add(
+				new Landmark("Rhodium Museum", 2, new Point(500, 700), 100, zooIcon, zoo, 60, 30, "objective_6.jpg"));
+		listStreet.add(
+				new Landmark("Independance Hall", 2, new Point(100, 400), 100, zooIcon, zoo, 60, 30, "objective_2.jpg"));
 
 		// Code for adding level 1
 
@@ -179,13 +193,20 @@ public class frmMain {
 				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/pin-animate.gif"));
 		Image scaleImageMinimapPin = iconMinimapPin.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 		minimapPin.setIcon(new ImageIcon(scaleImageMinimapPin));
-		minimapPin.setBounds(68, 87, 50, 55);
+		minimapPin.setBounds(0, 0, 50, 55);
 		panel_4.add(minimapPin);
+		minimapPin.setVisible(false);
+
+		panel_5 = new DigitalWatch();
+		panel_5.setBounds(25, 131, 283, 416);
+		panel.add(panel_5);
+		panel_5.setVisible(false);
+
 		JPanel panel_1 = new JPanel();
 
 		// test
 		ImageIcon background = new ImageIcon(this.getClass().getResource("background_edited.png"));
-		mapLevel1 = new VisitorDraw(listStreet, new Point(0, 500), background, lblX, lblNewLabel, minimapPin);
+		mapLevel1 = new VisitorDraw(listStreet, new Point(0, 500), background, lblX, lblNewLabel, minimapPin, this);
 		mapLevel1.setIcon(
 				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/background_extended.png")));
 		mapLevel1.setBounds(0, 0, 850, 1250);
