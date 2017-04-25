@@ -8,6 +8,8 @@ public class GlobalCitizenConstants {
 	public static final int STREET_WIDTH = 50;
 	public static final int CAR_WIDTH = 80;
 	public static final int CAR_HEIGHT = 40;
+	public static final int CAR_WIDTH_VERTICAL = 65;
+	public static final int CAR_HEIGHT_VERTICAL = 40;
 	public static final int HERO_WIDTH = 26;
 	public static final int HERO_HEIGHT = 32;
 	public static final int SIDE_WIDTH = 5;

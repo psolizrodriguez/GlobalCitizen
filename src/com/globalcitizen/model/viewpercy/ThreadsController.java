@@ -4,7 +4,7 @@ import com.shape.visitor.Visitor;
 
 //Controls all the game logic .. most important class in this project.
 public class ThreadsController extends Thread {
-	long speed = 30;
+	long speed = 15;
 	Visitor visitorDraw;
 	boolean pauseGame;
 

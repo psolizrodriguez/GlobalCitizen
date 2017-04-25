@@ -1,6 +1,7 @@
 package com.globalcitizen.model.characters;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -10,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
+import com.globalcitizen.model.viewpercy.frmMain;
 import com.shape.visitor.Visitor;
 
 public abstract class Creature extends JLabel {
@@ -77,14 +79,17 @@ public abstract class Creature extends JLabel {
 			this.setVerticalUnits(GlobalCitizenConstants.HERO_HEIGHT);
 		} else {
 			if (streetDirection == 2 || streetDirection == 4) {
-				this.setHorizontalUnits(GlobalCitizenConstants.CAR_HEIGHT);
-				this.setVerticalUnits(GlobalCitizenConstants.CAR_WIDTH);
+				this.setHorizontalUnits(GlobalCitizenConstants.CAR_HEIGHT_VERTICAL);
+				this.setVerticalUnits(GlobalCitizenConstants.CAR_WIDTH_VERTICAL);
 			} else {
 				this.setHorizontalUnits(GlobalCitizenConstants.CAR_WIDTH);
 				this.setVerticalUnits(GlobalCitizenConstants.CAR_HEIGHT);
 			}
-			background = new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/Ambulance.png"));
-			this.setIcon(background);
+			ImageIcon icon = new ImageIcon(frmMain.class
+					.getResource("/com/globalcitizen/model/viewpercy/BlueCar_" + streetDirection + ".png"));
+			Image scaleImage = icon.getImage().getScaledInstance(this.horizontalUnits, this.verticalUnits,
+					Image.SCALE_DEFAULT);
+			this.setIcon(new ImageIcon(scaleImage));
 		}
 		this.setBounds(currentPosition.x, currentPosition.y, this.horizontalUnits, this.verticalUnits);
 		// this.setIcon(background);
@@ -215,7 +220,7 @@ public abstract class Creature extends JLabel {
 									+ horizontalUnits) {
 						if (street.getStartingPoint().getY() <= this.getCurrentPosition().y
 								&& street.getStartingPoint().getY()
-										+ street.getStreetHeight()/2 >= this.getCurrentPosition().y + verticalUnits) {
+										+ street.getStreetHeight() / 2 >= this.getCurrentPosition().y + verticalUnits) {
 							return (Landmark) street;
 						}
 					}

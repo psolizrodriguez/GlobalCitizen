@@ -90,6 +90,7 @@ public class frmMain {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setResizable(false);
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 1241, 881);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -145,12 +146,12 @@ public class frmMain {
 				new Landmark("Rocky Statue", 2, new Point(100, 850), 100, zooIcon, zoo, 60, 30, "objective_5.jpg"));
 		listStreet.add(
 				new Landmark("Liberty Bell", 2, new Point(300, 550), 100, zooIcon, zoo, 60, 30, "objective_3.jpg"));
-		listStreet.add(
-				new Landmark("Frankiln Institute", 2, new Point(700, 1000), 100, zooIcon, zoo, 60, 30, "objective_1.jpg"));
+		listStreet.add(new Landmark("Frankiln Institute", 2, new Point(700, 1000), 100, zooIcon, zoo, 60, 30,
+				"objective_1.jpg"));
 		listStreet.add(
 				new Landmark("Rhodium Museum", 2, new Point(500, 700), 100, zooIcon, zoo, 60, 30, "objective_6.jpg"));
-		listStreet.add(
-				new Landmark("Independance Hall", 2, new Point(100, 400), 100, zooIcon, zoo, 60, 30, "objective_2.jpg"));
+		listStreet.add(new Landmark("Independance Hall", 2, new Point(100, 400), 100, zooIcon, zoo, 60, 30,
+				"objective_2.jpg"));
 
 		// Code for adding level 1
 
@@ -208,7 +209,7 @@ public class frmMain {
 		ImageIcon background = new ImageIcon(this.getClass().getResource("background_edited.png"));
 		mapLevel1 = new VisitorDraw(listStreet, new Point(0, 500), background, lblX, lblNewLabel, minimapPin, this);
 		mapLevel1.setIcon(
-				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/background_extended.png")));
+				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/GameBackground.png")));
 		mapLevel1.setBounds(0, 0, 850, 1250);
 		panel_1.setPreferredSize(new Dimension(850, 1250));
 		panel_1.setLayout(null);
@@ -221,6 +222,7 @@ public class frmMain {
 		scrollPane.setBounds(355, 13, 852, 653);
 		frame.getContentPane().add(scrollPane);
 		listStreet.get(1).createCar(mapLevel1);
+		//listStreet.get(1).createCar(mapLevel1);
 		setHero(mapLevel1.getHero());
 
 		panel_4.setSize(new Dimension(mapLevel1.getWidth() / 3, mapLevel1.getHeight() / 3));

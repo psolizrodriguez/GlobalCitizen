@@ -24,6 +24,7 @@ import com.globalcitizen.model.characters.Map;
 import com.globalcitizen.model.characters.Street;
 import com.globalcitizen.model.puzzle.PuzzleEx;
 import com.globalcitizen.model.viewpercy.GlobalCitizenUtils;
+import com.globalcitizen.model.viewpercy.MakeSound;
 import com.globalcitizen.model.viewpercy.ThreadsController;
 import com.globalcitizen.model.viewpercy.frmMain;
 
@@ -59,6 +60,9 @@ public class VisitorDraw extends Visitor {
 	boolean isInLandmark;
 	frmMain frmMain;
 	PuzzleEx puzzleEx;
+	boolean musicStarted;
+
+	MakeSound makeSound;
 
 	public ThreadsController getThreadsController() {
 		return threadsController;
@@ -95,15 +99,17 @@ public class VisitorDraw extends Visitor {
 		this.minimapPin = minimapPin;
 		auxXMenulandmarks = 10;
 		pinPoint = new JLabel();
-		ImageIcon icon = new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/pin_2.gif"));
-		Image scaleImage = icon.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+		ImageIcon icon = new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/pin-animate.gif"));
+		Image scaleImage = icon.getImage().getScaledInstance(150, 125, Image.SCALE_DEFAULT);
 		pinPoint.setIcon(new ImageIcon(scaleImage));
-		pinPoint.setBounds(0, 0, 50, 50);
+		pinPoint.setBounds(0, 0, 150, 125);
 		pinPoint.setOpaque(false);
 		pinPoint.setVisible(false);
 		this.add(pinPoint);
 
 		this.frmMain = frmMain;
+		makeSound = new MakeSound();
+
 	}
 
 	public JScrollPane getScrollPane() {
@@ -139,19 +145,26 @@ public class VisitorDraw extends Visitor {
 
 	}
 
+	public void playBackbroundMusic() {
+		if (!musicStarted) {
+			makeSound.playSound("strings3.wav");
+			musicStarted = true;
+		}
+	}
+
 	public void mainUpdateProccess() {
 		if (carsMoving) {
-			if (carCounter >= 200) {
+			carCounter++;
+			if (carCounter == 100) {
 				Random rand = new Random();
 				int n = rand.nextInt(map.getStreets().size());
 				if (!map.getStreets().get(n).isLandmark()) {
 					map.getStreets().get(n).createCar(this);
-				} else {
-					carCounter = 0;
 				}
-
+				carCounter = 0;
+				// playBackbroundMusic();
 			}
-			carCounter++;
+
 			map.moveCarsFromStreets(this);
 		}
 		if (triggerAnimationDown) {
@@ -223,7 +236,7 @@ public class VisitorDraw extends Visitor {
 	}
 
 	public void moveLandMarkPoint(Landmark landmark) {
-		pinPoint.setLocation(landmark.getStartingPoint().x, landmark.getStartingPoint().y - 50);
+		pinPoint.setLocation(landmark.getStartingPoint().x-55, landmark.getStartingPoint().y - 100);
 		pinPoint.setVisible(true);
 
 		minimapPin.setLocation(pinPoint.getLocation().x / 3, pinPoint.getLocation().y / 3);
@@ -333,37 +346,42 @@ public class VisitorDraw extends Visitor {
 		if (GlobalCitizenUtils.isTouristOnWay(map.getHero(), car, nextPosition)) {
 			touristWasHit();
 		} else {
+			boolean isCarOnWay = GlobalCitizenUtils.isCarOnWay(map.getStreets(), nextPosition, car);
+			System.out.println("isCarOnWay = " + isCarOnWay);
+			if (!isCarOnWay) {
 
-			switch (car.getCurrentStreet().getDirection()) {
-			case 2:
-				if (nextPosition.getY() > car.getCurrentStreet().getStartingPoint().getY()
-						+ car.getCurrentStreet().getStreetHeight()) {
-					return false;
+				switch (car.getCurrentStreet().getDirection()) {
+				case 2:
+					if (nextPosition.getY() > car.getCurrentStreet().getStartingPoint().getY()
+							+ car.getCurrentStreet().getStreetHeight()) {
+						return false;
 
+					}
+					break;
+				case 3:
+					if (nextPosition.getX() + car.getWidth() < 0) {
+						return false;
+
+					}
+					break;
+				case 4:
+					if (nextPosition.getX() - car.getHeight() < 0) {
+						return false;
+
+					}
+					break;
+				default:
+					if (nextPosition.getX() > car.getCurrentStreet().getStartingPoint().getX()
+							+ car.getCurrentStreet().getStreetWidth()) {
+						return false;
+
+					}
+					break;
 				}
-				break;
-			case 3:
-				if (nextPosition.getX() + car.getWidth() < 0) {
-					return false;
-
-				}
-				break;
-			case 4:
-				if (nextPosition.getX() - car.getHeight() < 0) {
-					return false;
-
-				}
-				break;
-			default:
-				if (nextPosition.getX() > car.getCurrentStreet().getStartingPoint().getX()
-						+ car.getCurrentStreet().getStreetWidth()) {
-					return false;
-
-				}
-				break;
+				car.getCurrentPosition().x = nextPosition.x;
+				car.getCurrentPosition().y = nextPosition.y;
 			}
-			car.getCurrentPosition().x = nextPosition.x;
-			car.getCurrentPosition().y = nextPosition.y;
+			return true;
 		}
 		return true;
 	}
