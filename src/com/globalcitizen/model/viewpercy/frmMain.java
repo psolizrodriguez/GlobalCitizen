@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
@@ -23,9 +24,6 @@ import com.globalcitizen.model.characters.Landmark;
 import com.globalcitizen.model.characters.Street;
 import com.shape.visitor.Visitor;
 import com.shape.visitor.VisitorDraw;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class frmMain {
 
@@ -195,6 +193,15 @@ public class frmMain {
 		setHero(mapLevel1.getHero());
 
 		panel_4.setSize(new Dimension(mapLevel1.getWidth() / 3, mapLevel1.getHeight() / 3));
+
+		JLabel minimapPin = new JLabel("New label");
+
+		ImageIcon iconMinimapPin = new ImageIcon(
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/pin-animate.gif"));
+		Image scaleImageMinimapPin = iconMinimapPin.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+		minimapPin.setIcon(new ImageIcon(scaleImageMinimapPin));
+		minimapPin.setBounds(68, 87, 144, 126);
+		panel_4.add(minimapPin);
 
 		// Code for drawing Streets
 		mapLevel1.drawLandmarks(listStreet);

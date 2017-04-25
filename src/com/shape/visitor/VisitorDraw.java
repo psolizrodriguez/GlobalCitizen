@@ -142,7 +142,7 @@ public class VisitorDraw extends Visitor {
 
 	public void mainUpdateProccess() {
 		if (carsMoving) {
-			if (carCounter == 200) {
+			if (carCounter >= 200) {
 				Random rand = new Random();
 				int n = rand.nextInt(map.getStreets().size());
 				if (!map.getStreets().get(n).isLandmark()) {
