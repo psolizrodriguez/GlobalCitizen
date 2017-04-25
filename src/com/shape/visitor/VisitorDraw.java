@@ -55,6 +55,7 @@ public class VisitorDraw extends Visitor {
 	JScrollPane scrollPane;
 	JLabel menuItems;
 	int auxXMenulandmarks;
+	JLabel minimapPin;
 
 	public ThreadsController getThreadsController() {
 		return threadsController;
@@ -81,13 +82,14 @@ public class VisitorDraw extends Visitor {
 	}
 
 	public VisitorDraw(List<Street> streets, Point heroStartingPoint, ImageIcon background, JLabel lblX,
-			JLabel menuItems) {
+			JLabel menuItems, JLabel minimapPin) {
 		super(background);
 		this.map = new Map(streets, new Hero(heroStartingPoint, this));
 		this.lblX = lblX;
 		lblX.setLocation(heroStartingPoint.x / 3, heroStartingPoint.y / 3);
 		this.carsMoving = true;
 		this.menuItems = menuItems;
+		this.minimapPin = minimapPin;
 		auxXMenulandmarks = 10;
 		pinPoint = new JLabel();
 		ImageIcon icon = new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/pin_2.gif"));
@@ -181,7 +183,6 @@ public class VisitorDraw extends Visitor {
 
 			}
 		}
-		System.out.println("repainting scroll");
 		if (scrollPane != null) {
 			scrollPane.getParent().repaint();
 		}
@@ -218,6 +219,9 @@ public class VisitorDraw extends Visitor {
 		door.setLocation(landmark.getStartingPoint().x, landmark.getStartingPoint().y);
 		pinPoint.setVisible(true);
 		door.setVisible(true);
+
+		minimapPin.setLocation(pinPoint.getLocation().x / 3, pinPoint.getLocation().y / 3);
+		minimapPin.setVisible(true);
 	}
 
 	public void onDrawStreet(Graphics g, Street street) {

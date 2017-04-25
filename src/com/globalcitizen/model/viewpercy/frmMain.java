@@ -135,6 +135,8 @@ public class frmMain {
 		ImageIcon zoo = new ImageIcon(this.getClass().getResource("philiZoo.jpg"));
 		// Now we add the landmarks
 		listStreet.add(new Landmark(2, new Point(500, 250), 100, zooIcon, zoo, 60, 30));
+		listStreet.add(new Landmark(2, new Point(100, 850), 100, zooIcon, zoo, 60, 30));
+		listStreet.add(new Landmark(3, new Point(100, 400), 100, zooIcon, zoo, 60, 30));
 
 		// Code for adding level 1
 
@@ -171,11 +173,19 @@ public class frmMain {
 		lblNewLabel.setBounds(0, 0, 920, 144);
 		panel_2.add(lblNewLabel);
 
+		JLabel minimapPin = new JLabel("");
+
+		ImageIcon iconMinimapPin = new ImageIcon(
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/pin-animate.gif"));
+		Image scaleImageMinimapPin = iconMinimapPin.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+		minimapPin.setIcon(new ImageIcon(scaleImageMinimapPin));
+		minimapPin.setBounds(68, 87, 50, 55);
+		panel_4.add(minimapPin);
 		JPanel panel_1 = new JPanel();
 
 		// test
 		ImageIcon background = new ImageIcon(this.getClass().getResource("background_edited.png"));
-		mapLevel1 = new VisitorDraw(listStreet, new Point(0, 500), background, lblX, lblNewLabel);
+		mapLevel1 = new VisitorDraw(listStreet, new Point(0, 500), background, lblX, lblNewLabel, minimapPin);
 		mapLevel1.setIcon(
 				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/background_extended.png")));
 		mapLevel1.setBounds(0, 0, 850, 1250);
@@ -193,15 +203,6 @@ public class frmMain {
 		setHero(mapLevel1.getHero());
 
 		panel_4.setSize(new Dimension(mapLevel1.getWidth() / 3, mapLevel1.getHeight() / 3));
-
-		JLabel minimapPin = new JLabel("New label");
-
-		ImageIcon iconMinimapPin = new ImageIcon(
-				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/pin-animate.gif"));
-		Image scaleImageMinimapPin = iconMinimapPin.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
-		minimapPin.setIcon(new ImageIcon(scaleImageMinimapPin));
-		minimapPin.setBounds(68, 87, 144, 126);
-		panel_4.add(minimapPin);
 
 		// Code for drawing Streets
 		mapLevel1.drawLandmarks(listStreet);
