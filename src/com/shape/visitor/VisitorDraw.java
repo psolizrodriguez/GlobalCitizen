@@ -3,28 +3,34 @@ package com.shape.visitor;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.util.List;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 import com.globalcitizen.model.characters.Car;
 import com.globalcitizen.model.characters.Hero;
+import com.globalcitizen.model.characters.Landmark;
 import com.globalcitizen.model.characters.Map;
 import com.globalcitizen.model.characters.Street;
 import com.globalcitizen.model.viewpercy.GlobalCitizenUtils;
 import com.globalcitizen.model.viewpercy.ThreadsController;
+import com.globalcitizen.model.viewpercy.frmMain;
 
 public class VisitorDraw extends Visitor {
 
 	public void onDrawHero(Graphics g, Hero hero) {
 		hero.setLocation(hero.getCurrentPosition().x, hero.getCurrentPosition().y);
-		lblX.setLocation(hero.getCurrentPosition().x / 4, hero.getCurrentPosition().y / 4);
+		lblX.setLocation(hero.getCurrentPosition().x / 3, hero.getCurrentPosition().y / 3);
 	}
 
 	public void onDrawCar(Graphics g, Car car) {
@@ -32,6 +38,8 @@ public class VisitorDraw extends Visitor {
 	}
 
 	Map map;
+	JLabel pinPoint;
+	JLabel door;
 	Rectangle heroSquare;
 	int mapCreated = 0;
 	int carRefreshRateCounter = 0;
@@ -45,6 +53,8 @@ public class VisitorDraw extends Visitor {
 	boolean triggerAnimationDown;
 	boolean carsMoving;
 	JScrollPane scrollPane;
+	JLabel menuItems;
+	int auxXMenulandmarks;
 
 	public ThreadsController getThreadsController() {
 		return threadsController;
@@ -70,12 +80,31 @@ public class VisitorDraw extends Visitor {
 		this.map = map;
 	}
 
-	public VisitorDraw(List<Street> streets, Point heroStartingPoint, ImageIcon background, JLabel lblX) {
+	public VisitorDraw(List<Street> streets, Point heroStartingPoint, ImageIcon background, JLabel lblX,
+			JLabel menuItems) {
 		super(background);
 		this.map = new Map(streets, new Hero(heroStartingPoint, this));
 		this.lblX = lblX;
-		lblX.setLocation(heroStartingPoint.x / 4, heroStartingPoint.y / 4);
+		lblX.setLocation(heroStartingPoint.x / 3, heroStartingPoint.y / 3);
 		this.carsMoving = true;
+		this.menuItems = menuItems;
+		auxXMenulandmarks = 10;
+		pinPoint = new JLabel();
+		ImageIcon icon = new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/pin_2.gif"));
+		Image scaleImage = icon.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+		pinPoint.setIcon(new ImageIcon(scaleImage));
+		pinPoint.setBounds(0, 0, 50, 50);
+		pinPoint.setOpaque(false);
+		pinPoint.setVisible(false);
+		this.add(pinPoint);
+		door = new JLabel();
+		ImageIcon iconDoor = new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/door.gif"));
+		Image scaleImageDoor = iconDoor.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+		door.setIcon(new ImageIcon(scaleImageDoor));
+		door.setBounds(0, 0, 50, 50);
+		door.setOpaque(false);
+		door.setVisible(false);
+		this.add(door);
 	}
 
 	public JScrollPane getScrollPane() {
@@ -88,12 +117,10 @@ public class VisitorDraw extends Visitor {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		// We draw the streets
-		if (map.getStreets().size() > 0) {
-			for (Street street : map.getStreets()) {
-				street.paintComponent(g, this);
-			}
-		}
+		/*
+		 * // We draw the streets if (map.getStreets().size() > 0) { for (Street
+		 * street : map.getStreets()) { street.paintComponent(g, this); } }
+		 */
 		// We draw the tourist
 		if (heroMoved) {
 			map.getHero().paintComponent(g, this);
@@ -118,9 +145,12 @@ public class VisitorDraw extends Visitor {
 			if (carCounter == 200) {
 				Random rand = new Random();
 				int n = rand.nextInt(map.getStreets().size());
-				map.getStreets().get(n).createCar(this);
-				// map.getStreets().get(0).createCar(this);
-				carCounter = 0;
+				if (!map.getStreets().get(n).isLandmark()) {
+					map.getStreets().get(n).createCar(this);
+				} else {
+					carCounter = 0;
+				}
+
 			}
 			carCounter++;
 			map.moveCarsFromStreets(this);
@@ -162,6 +192,34 @@ public class VisitorDraw extends Visitor {
 		// threadsController.stopTheGame();
 	}
 
+	public void drawLandmarks(List<Street> streets) {
+		if (streets != null && streets.size() > 0) {
+			for (Street street : streets) {
+				if (street.isLandmark()) {
+					Landmark landmark = (Landmark) street;
+					JButton btnNewButton_1 = new JButton();
+					btnNewButton_1.setBounds(auxXMenulandmarks, 23, 135, 100);
+					menuItems.add(btnNewButton_1);
+					landmark.setButton(btnNewButton_1);
+					btnNewButton_1.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							moveLandMarkPoint(landmark);
+						}
+					});
+					auxXMenulandmarks += 155;
+				}
+
+			}
+		}
+	}
+
+	public void moveLandMarkPoint(Landmark landmark) {
+		pinPoint.setLocation(landmark.getStartingPoint().x, landmark.getStartingPoint().y - 50);
+		door.setLocation(landmark.getStartingPoint().x, landmark.getStartingPoint().y);
+		pinPoint.setVisible(true);
+		door.setVisible(true);
+	}
+
 	public void onDrawStreet(Graphics g, Street street) {
 		Graphics2D g2d = (Graphics2D) g;
 		/*
@@ -172,6 +230,7 @@ public class VisitorDraw extends Visitor {
 		 */
 
 		if (street.isLandmark()) {
+
 			g2d.setColor(Color.YELLOW);
 			Rectangle rectangle = new Rectangle(street.getStartingPoint().x, street.getStartingPoint().y,
 					street.getStreetWidth(), street.getStreetHeight());

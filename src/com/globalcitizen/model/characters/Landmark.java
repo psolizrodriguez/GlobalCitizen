@@ -3,12 +3,22 @@ package com.globalcitizen.model.characters;
 import java.awt.Point;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 public class Landmark extends Street {
 	ImageIcon mapImage;
 	ImageIcon menuImage;
 	int secondsToComplete;
 	int secondsToWinChallenge;
+	JButton button;
+
+	public JButton getButton() {
+		return button;
+	}
+
+	public void setButton(JButton button) {
+		this.button = button;
+	}
 
 	public Landmark(int direction, Point startingPoint, int streetWidth, ImageIcon mapImage, ImageIcon menuImage,
 			int secondsToComplete, int secondsToWinChallenge) {
