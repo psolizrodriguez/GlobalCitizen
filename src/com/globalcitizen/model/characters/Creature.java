@@ -177,13 +177,13 @@ public abstract class Creature extends JLabel {
 		this.movementSpeed = movementSpeed;
 	}
 
-	public boolean iscreatureInsideOfStreets(List<Street> listStreets, int futureX, int futureY) {
+	public boolean iscreatureInsideOfStreets(List<Street> listStreets, Point nextPoint) {
 		if (listStreets != null && listStreets.size() > 0) {
 			for (Street street : listStreets) {
-				if (street.getStartingPoint().getX() <= futureX
-						&& street.getStartingPoint().getX() + street.getStreetWidth() >= futureX + horizontalUnits) {
-					if (street.getStartingPoint().getY() <= futureY
-							&& street.getStartingPoint().getY() + street.getStreetHeight() >= futureY + verticalUnits) {
+				if (street.getStartingPoint().getX() <= nextPoint.x && street.getStartingPoint().getX()
+						+ street.getStreetWidth() >= nextPoint.x + horizontalUnits) {
+					if (street.getStartingPoint().getY() <= nextPoint.y && street.getStartingPoint().getY()
+							+ street.getStreetHeight() >= nextPoint.y + verticalUnits) {
 						return true;
 					}
 				}

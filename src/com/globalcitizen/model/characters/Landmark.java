@@ -15,6 +15,15 @@ public class Landmark extends Street {
 	String landmarkImage;
 	String name;
 	JLabel door;
+	boolean startingPointTourist;
+
+	public boolean isStartingPointTourist() {
+		return startingPointTourist;
+	}
+
+	public void setStartingPointTourist(boolean startingPointTourist) {
+		this.startingPointTourist = startingPointTourist;
+	}
 
 	public JLabel getDoor() {
 		return door;
@@ -49,7 +58,8 @@ public class Landmark extends Street {
 	}
 
 	public Landmark(String name, int direction, Point startingPoint, int streetWidth, ImageIcon mapImage,
-			ImageIcon menuImage, int secondsToComplete, int secondsToWinChallenge, String landmarkImage) {
+			ImageIcon menuImage, int secondsToComplete, int secondsToWinChallenge, String landmarkImage,
+			boolean startingPointTourist) {
 
 		super(direction, startingPoint, streetWidth);
 		this.mapImage = mapImage;
@@ -59,6 +69,7 @@ public class Landmark extends Street {
 		this.landmark = true;
 		this.landmarkImage = landmarkImage;
 		this.name = name;
+		this.startingPointTourist = startingPointTourist;
 	}
 
 	public ImageIcon getMapImage() {

@@ -23,6 +23,7 @@ import com.globalcitizen.model.characters.Landmark;
 import com.globalcitizen.model.characters.Map;
 import com.globalcitizen.model.characters.Street;
 import com.globalcitizen.model.puzzle.PuzzleEx;
+import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
 import com.globalcitizen.model.viewpercy.GlobalCitizenUtils;
 import com.globalcitizen.model.viewpercy.MakeSound;
 import com.globalcitizen.model.viewpercy.ThreadsController;
@@ -61,6 +62,10 @@ public class VisitorDraw extends Visitor {
 	frmMain frmMain;
 	PuzzleEx puzzleEx;
 	boolean musicStarted;
+	JLabel camera;
+	JLabel backgroundPicture;
+	public boolean gamePaused;
+	public JLabel lblTimeToExplore;
 
 	MakeSound makeSound;
 
@@ -109,7 +114,51 @@ public class VisitorDraw extends Visitor {
 
 		this.frmMain = frmMain;
 		makeSound = new MakeSound();
+		camera = new JLabel();
+		ImageIcon iconCamera = new ImageIcon(
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/camera.png"));
+		Image scaleIconCamera = iconCamera.getImage().getScaledInstance(500, 300, Image.SCALE_DEFAULT);
 
+		camera.setIcon(new ImageIcon(scaleIconCamera));
+
+		JButton close = new JButton();
+		ImageIcon iconClose = new ImageIcon(
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/close_button.png"));
+		Image scaleiconClose = iconClose.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT);
+		close.setIcon(new ImageIcon(scaleiconClose));
+		close.setBounds(432, 120, 23, 23);
+		close.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				closeMinigame(false);
+			}
+		});
+		camera.add(close);
+		camera.setVisible(false);
+		frmMain.panel_1.add(camera);
+
+		backgroundPicture = new JLabel();
+		backgroundPicture.setBounds(0, 0, 850, 650);
+		frmMain.panel_1.add(backgroundPicture);
+		backgroundPicture.setVisible(false);
+
+		lblTimeToExplore = new JLabel();
+		lblTimeToExplore.setBounds(150, 70, 120, 100);
+		ImageIcon iconExplore = new ImageIcon(
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/bubble.png"));
+		Image scaleIconExplore = iconExplore.getImage().getScaledInstance(lblTimeToExplore.getWidth(),
+				lblTimeToExplore.getHeight(), Image.SCALE_DEFAULT);
+		lblTimeToExplore.setIcon(new ImageIcon(scaleIconExplore));
+		lblTimeToExplore.setVisible(false);
+
+		this.add(lblTimeToExplore);
+	}
+
+	public void reloadBackgroundImage(Landmark landmark) {
+		ImageIcon iconObjective = new ImageIcon(ClassLoader.getSystemResource(landmark.getLandmarkImage()));
+		Image scaleIconObjective = iconObjective.getImage().getScaledInstance(backgroundPicture.getWidth(),
+				backgroundPicture.getHeight(), Image.SCALE_DEFAULT);
+		backgroundPicture.setIcon(new ImageIcon(scaleIconObjective));
+		backgroundPicture.setVisible(true);
 	}
 
 	public JScrollPane getScrollPane() {
@@ -199,7 +248,7 @@ public class VisitorDraw extends Visitor {
 	}
 
 	public void touristWasHit() {
-		carsMoving = false;
+		gamePaused = false;
 		// threadsController.stopTheGame();
 	}
 
@@ -208,10 +257,27 @@ public class VisitorDraw extends Visitor {
 			for (Street street : streets) {
 				if (street.isLandmark()) {
 					Landmark landmark = (Landmark) street;
-					JButton btnNewButton_1 = new JButton();
-					btnNewButton_1.setBounds(auxXMenulandmarks, 23, 135, 100);
-					menuItems.add(btnNewButton_1);
-					landmark.setButton(btnNewButton_1);
+
+					if (!landmark.isStartingPointTourist()) {
+						JButton btnNewButton_1 = new JButton();
+						// Put images into the buttons
+						ImageIcon iconObjective = new ImageIcon(
+								ClassLoader.getSystemResource(landmark.getLandmarkImage()));
+						Image scaleIconObjective = iconObjective.getImage().getScaledInstance(135, 100,
+								Image.SCALE_DEFAULT);
+						btnNewButton_1.setIcon(new ImageIcon(scaleIconObjective));
+						// Putting images
+						btnNewButton_1.setBounds(auxXMenulandmarks, 23, 135, 100);
+						menuItems.add(btnNewButton_1);
+						btnNewButton_1.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								moveLandMarkPoint(landmark);
+							}
+						});
+						auxXMenulandmarks += 154;
+						landmark.setButton(btnNewButton_1);
+					}
+
 					// Adding the door
 					JLabel door = new JLabel();
 					ImageIcon iconDoor = new ImageIcon(
@@ -223,12 +289,7 @@ public class VisitorDraw extends Visitor {
 					door.setVisible(true);
 					this.add(door);
 					landmark.setDoor(door);
-					btnNewButton_1.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							moveLandMarkPoint(landmark);
-						}
-					});
-					auxXMenulandmarks += 155;
+
 				}
 
 			}
@@ -236,7 +297,7 @@ public class VisitorDraw extends Visitor {
 	}
 
 	public void moveLandMarkPoint(Landmark landmark) {
-		pinPoint.setLocation(landmark.getStartingPoint().x-55, landmark.getStartingPoint().y - 100);
+		pinPoint.setLocation(landmark.getStartingPoint().x - 55, landmark.getStartingPoint().y - 100);
 		pinPoint.setVisible(true);
 
 		minimapPin.setLocation(pinPoint.getLocation().x / 3, pinPoint.getLocation().y / 3);
@@ -265,8 +326,22 @@ public class VisitorDraw extends Visitor {
 		frmMain.panel_4.setVisible(false);
 		frmMain.panel_5.setVisible(true);
 		frmMain.panel_5.start();
-		puzzleEx = new PuzzleEx(landmark, this);
+		// puzzleEx = new PuzzleEx();
+		gamePaused = true;
+		puzzleEx = new PuzzleEx();
+		puzzleEx.setBounds(37, 60, 300, 210);
+		camera.add(puzzleEx);
+		puzzleEx.loadImage(landmark, this);
 		this.threadsController.pauseGame();
+		if (currentMapPiece == 2) {
+			backgroundPicture.setBounds(0, 600, 850, 650);
+			camera.setBounds(174, 782, 500, 300);
+		} else {
+			backgroundPicture.setBounds(0, 0, 850, 650);
+			camera.setBounds(174, 182, 500, 300);
+		}
+		camera.setVisible(true);
+		reloadBackgroundImage(landmark);
 		this.setVisible(false);
 
 	}
@@ -275,69 +350,82 @@ public class VisitorDraw extends Visitor {
 		frmMain.panel_4.setVisible(true);
 		frmMain.panel_5.setVisible(false);
 		frmMain.panel_5.stop();
-		this.setVisible(true);
+		if (puzzleEx != null) {
+			camera.remove(puzzleEx);
+		}
+		camera.setVisible(false);
+		// puzzleEx = null;
 		this.threadsController.resumeGame();
+		gamePaused = false;
+		this.setVisible(true);
+		backgroundPicture.setVisible(false);
 	}
 
 	public void moveHero(int keycode) {
+		if (!gamePaused) {
 
-		switch (keycode) {
-		case 39: // -> Right
-			heroMoved = getMap().getHero().moveRight(getMap().getStreets());
-			break;
-		case 38: // -> Top
-			heroMoved = getMap().getHero().moveUp(getMap().getStreets());
-			if (heroMoved) {
-				int auxCurrentMapPiece = getMap().getHero().moveScroll(map.getStreets(), currentMapPiece);
-				if (auxCurrentMapPiece != 0) {
-					currentMapPiece = auxCurrentMapPiece;
-					if (currentMapPiece == 1) {
-						triggerAnimationUp = true;
+			switch (keycode) {
+			case 39: // -> Right
+				heroMoved = getMap().getHero().moveRight(getMap().getStreets());
+				break;
+			case 38: // -> Top
+				heroMoved = getMap().getHero().moveUp(getMap().getStreets());
+				if (heroMoved) {
+					int auxCurrentMapPiece = getMap().getHero().moveScroll(map.getStreets(), currentMapPiece);
+					if (auxCurrentMapPiece != 0) {
+						currentMapPiece = auxCurrentMapPiece;
+						if (currentMapPiece == 1) {
+							triggerAnimationUp = true;
 
+						}
 					}
 				}
-			}
-			break;
+				break;
 
-		case 37: // -> Left
-			heroMoved = getMap().getHero().moveLeft(getMap().getStreets());
-			break;
+			case 37: // -> Left
+				heroMoved = getMap().getHero().moveLeft(getMap().getStreets());
+				break;
 
-		case 40: // -> Bottom
-			heroMoved = getMap().getHero().moveDown(getMap().getStreets());
-			if (heroMoved) {
-				int auxCurrentMapPiece = getMap().getHero().moveScroll(map.getStreets(), currentMapPiece);
-				if (auxCurrentMapPiece != 0) {
-					currentMapPiece = auxCurrentMapPiece;
-					System.out.println("currentMapPiece = " + currentMapPiece);
-					if (currentMapPiece == 2) {
-						triggerAnimationDown = true;
+			case 40: // -> Bottom
+				heroMoved = getMap().getHero().moveDown(getMap().getStreets());
+				if (heroMoved) {
+					int auxCurrentMapPiece = getMap().getHero().moveScroll(map.getStreets(), currentMapPiece);
+					if (auxCurrentMapPiece != 0) {
+						currentMapPiece = auxCurrentMapPiece;
+						System.out.println("currentMapPiece = " + currentMapPiece);
+						if (currentMapPiece == 2) {
+							triggerAnimationDown = true;
+						}
 					}
 				}
-			}
-			break;
+				break;
 
-		default:
-			break;
+			default:
+				break;
+			}
+
+			// Check if hero is inside of landmark
+			Landmark auxLandmark = getMap().getHero().iscreatureInsideOfLandmark(getMap().getStreets());
+			if (auxLandmark != null) {
+				if (!isInLandmark) {
+					System.out.println("is in Landmark");
+					if (!auxLandmark.isStartingPointTourist()) {
+						executeMinigame(auxLandmark);
+					}
+					isInLandmark = true;
+				}
+				frmMain.progressBar.setValue(GlobalCitizenConstants.TIME_INTERVAL);
+				frmMain.timeLeft = GlobalCitizenConstants.TIME_INTERVAL;
+			} else {
+				if (isInLandmark) {
+					isInLandmark = false;
+					System.out.println("is out Landmark");
+					closeMinigame(false);
+				}
+
+			}
+			this.repaint();
 		}
-
-		// Check if hero is inside of landmark
-		Landmark auxLandmark = getMap().getHero().iscreatureInsideOfLandmark(getMap().getStreets());
-		if (auxLandmark != null) {
-			if (!isInLandmark) {
-				System.out.println("is in Landmark");
-				executeMinigame(auxLandmark);
-				isInLandmark = true;
-			}
-		} else {
-			if (isInLandmark) {
-				isInLandmark = false;
-				System.out.println("is out Landmark");
-				closeMinigame(false);
-			}
-
-		}
-		this.repaint();
 	}
 
 	public boolean moveCar(Car car) {
@@ -347,7 +435,6 @@ public class VisitorDraw extends Visitor {
 			touristWasHit();
 		} else {
 			boolean isCarOnWay = GlobalCitizenUtils.isCarOnWay(map.getStreets(), nextPosition, car);
-			System.out.println("isCarOnWay = " + isCarOnWay);
 			if (!isCarOnWay) {
 
 				switch (car.getCurrentStreet().getDirection()) {

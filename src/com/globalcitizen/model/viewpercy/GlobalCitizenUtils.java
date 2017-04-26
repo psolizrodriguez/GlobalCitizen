@@ -84,6 +84,60 @@ public class GlobalCitizenUtils {
 		return rect2.contains(a) || rect2.contains(b);
 	}
 
+	public static boolean isCarOnWayOfTourist(List<Street> lisStreet, Point next, Hero hero, int direction) {
+		if (lisStreet != null && lisStreet.size() > 0) {
+			for (Street street : lisStreet) {
+				if (street.getListCars() != null && street.getListCars().size() > 0) {
+					for (Car car : street.getListCars()) {
+						if (isCarOnWayOfHero(hero, car, next, direction)) {
+							return true;
+						}
+
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean isCarOnWayOfHero(Hero hero, Car car, Point next, int direction) {
+		int spaceBetweenCars = 10;
+		int futureX_1, futureX_2, futureY_1, futureY_2;
+
+		switch (direction) {
+		case 2:
+			futureX_1 = next.x;
+			futureY_1 = next.y + hero.getVerticalUnits() + spaceBetweenCars;
+			futureX_2 = next.x + hero.getHorizontalUnits();
+			futureY_2 = next.y + hero.getVerticalUnits() + spaceBetweenCars;
+			break;
+		case 3:
+			futureX_1 = next.x - spaceBetweenCars;
+			futureY_1 = next.y;
+			futureX_2 = next.x - spaceBetweenCars;
+			futureY_2 = next.y + hero.getVerticalUnits();
+			break;
+		case 4:
+			futureX_1 = next.x;
+			futureY_1 = next.y - spaceBetweenCars;
+			futureX_2 = next.x + hero.getHorizontalUnits();
+			futureY_2 = next.y - spaceBetweenCars;
+			break;
+		default:
+			futureX_1 = next.x + hero.getHorizontalUnits() + spaceBetweenCars;
+			futureY_1 = next.y;
+			futureX_2 = next.x + hero.getHorizontalUnits() + spaceBetweenCars;
+			futureY_2 = next.y + hero.getVerticalUnits();
+			break;
+		}
+
+		Point a = new Point(futureX_1, futureY_1);
+		Point b = new Point(futureX_2, futureY_2);
+		Rectangle rect2 = new Rectangle(car.getCurrentPosition().x, car.getCurrentPosition().y,
+				car.getHorizontalUnits(), car.getVerticalUnits());
+		return rect2.contains(a) || rect2.contains(b);
+	}
+
 	public static boolean isTouristOnWay(Hero hero, Car car, Point next) {
 		Point a = new Point(hero.getCurrentPosition().x, hero.getCurrentPosition().y);
 		Point b = new Point(hero.getCurrentPosition().x + hero.getHorizontalUnits(), hero.getCurrentPosition().y);

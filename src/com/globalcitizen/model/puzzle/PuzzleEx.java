@@ -22,13 +22,12 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.globalcitizen.model.characters.Landmark;
 import com.shape.visitor.Visitor;
 
-public class PuzzleEx extends JFrame {
+public class PuzzleEx extends JPanel {
 
 	private JPanel panel;
 	private BufferedImage source;
@@ -44,13 +43,18 @@ public class PuzzleEx extends JFrame {
 	Landmark landmark;
 	Visitor visitor;
 
-	public PuzzleEx(Landmark landmark, Visitor visitor) {
+	public PuzzleEx() {
+		super();
+	}
+
+	public void loadImage(Landmark landmark, Visitor visitor) {
 		this.landmark = landmark;
 		this.visitor = visitor;
 		initUI();
-		setAlwaysOnTop(true);
-		setVisible(true);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		/*
+		 * setAlwaysOnTop(true); setVisible(true);
+		 * setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		 */
 	}
 
 	private void initUI() {
@@ -72,6 +76,7 @@ public class PuzzleEx extends JFrame {
 
 		panel = new JPanel();
 		panel.setBorder(BorderFactory.createLineBorder(Color.gray));
+		panel.setBackground(Color.WHITE);
 		panel.setLayout(new GridLayout(4, 3, 0, 0));
 
 		try {
@@ -120,17 +125,15 @@ public class PuzzleEx extends JFrame {
 			btn.addActionListener(new ClickAction());
 		}
 
-		pack();
-		setTitle(landmark.getName());
-		setResizable(false);
-		setLocationRelativeTo(null);
-		addWindowListener(new java.awt.event.WindowAdapter() {
-			@Override
-			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-				System.out.println("closing");
-				visitor.closeMinigame(false);
-			}
-		});
+		/*
+		 * pack(); setTitle(landmark.getName()); setResizable(false);
+		 * setLocationRelativeTo(null); addWindowListener(new
+		 * java.awt.event.WindowAdapter() {
+		 * 
+		 * @Override public void windowClosing(java.awt.event.WindowEvent
+		 * windowEvent) { System.out.println("closing");
+		 * visitor.closeMinigame(false); } });
+		 */
 	}
 
 	private int getNewHeight(int w, int h) {
@@ -209,7 +212,7 @@ public class PuzzleEx extends JFrame {
 			// JOptionPane.showMessageDialog(panel, "Finished",
 			// "Congratulation", JOptionPane.INFORMATION_MESSAGE);
 			visitor.closeMinigame(true);
-			this.dispose();
+			// this.dispose();
 			// Code to resume the game
 		}
 	}

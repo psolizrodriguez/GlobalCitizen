@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import com.globalcitizen.model.viewpercy.GlobalCitizenConstants;
+import com.globalcitizen.model.viewpercy.GlobalCitizenUtils;
 import com.shape.visitor.Visitor;
 
 public class Hero extends Creature {
@@ -141,10 +142,13 @@ public class Hero extends Creature {
 		moveVerticalDown();
 	}
 
-	public boolean moveRight(List<Street> listStreets) {
+	public boolean moveRight(List<Street> listStreet) {
 		moveHorizontalRigth();
-		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().x + 1, this.getCurrentPosition().y)) {
-			this.getCurrentPosition().x += 1;
+		Point nextPoint = new Point(this.getCurrentPosition().x + GlobalCitizenConstants.PIXELS_BY_STEP,
+				this.getCurrentPosition().y);
+		if (iscreatureInsideOfStreets(listStreet, nextPoint)
+				&& !GlobalCitizenUtils.isCarOnWayOfTourist(listStreet, nextPoint, this, 1)) {
+			this.getCurrentPosition().x = nextPoint.x;
 			return true;
 		}
 		return false;
@@ -153,8 +157,11 @@ public class Hero extends Creature {
 
 	public boolean moveUp(List<Street> listStreets) {
 		moveVerticalUp();
-		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().x, this.getCurrentPosition().y - 1)) {
-			this.getCurrentPosition().y -= 1;
+		Point nextPoint = new Point(this.getCurrentPosition().x,
+				this.getCurrentPosition().y - GlobalCitizenConstants.PIXELS_BY_STEP);
+		if (iscreatureInsideOfStreets(listStreets, nextPoint)
+				&& !GlobalCitizenUtils.isCarOnWayOfTourist(listStreets, nextPoint, this, 4)) {
+			this.getCurrentPosition().y = nextPoint.y;
 			return true;
 		}
 		return false;
@@ -163,8 +170,11 @@ public class Hero extends Creature {
 
 	public boolean moveLeft(List<Street> listStreets) {
 		moveHorizontalLeft();
-		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().x - 1, this.getCurrentPosition().y)) {
-			this.getCurrentPosition().x -= 1;
+		Point nextPoint = new Point(this.getCurrentPosition().x - GlobalCitizenConstants.PIXELS_BY_STEP,
+				this.getCurrentPosition().y);
+		if (iscreatureInsideOfStreets(listStreets, nextPoint)
+				&& !GlobalCitizenUtils.isCarOnWayOfTourist(listStreets, nextPoint, this, 3)) {
+			this.getCurrentPosition().x = nextPoint.x;
 			return true;
 		}
 		return false;
@@ -173,8 +183,11 @@ public class Hero extends Creature {
 
 	public boolean moveDown(List<Street> listStreets) {
 		moveVerticalDown();
-		if (iscreatureInsideOfStreets(listStreets, this.getCurrentPosition().x, this.getCurrentPosition().y + 1)) {
-			this.getCurrentPosition().y += 1;
+		Point nextPoint = new Point(this.getCurrentPosition().x,
+				this.getCurrentPosition().y + GlobalCitizenConstants.PIXELS_BY_STEP);
+		if (iscreatureInsideOfStreets(listStreets, nextPoint)
+				&& !GlobalCitizenUtils.isCarOnWayOfTourist(listStreets, nextPoint, this, 2)) {
+			this.getCurrentPosition().y = nextPoint.y;
 			return true;
 		}
 		return false;
