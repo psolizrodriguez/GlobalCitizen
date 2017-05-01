@@ -2,7 +2,6 @@ package com.globalcitizen.model.viewpercy;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.KeyEventDispatcher;
@@ -23,6 +22,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 
 import com.globalcitizen.model.characters.Creature;
 import com.globalcitizen.model.characters.Landmark;
@@ -45,6 +45,21 @@ public class frmMain {
 	private JLabel mobile;
 	private JLabel lblGlobalCitizen;
 	public JButton recharge;
+	private JLabel lblNewLabel_1;
+	ThreadsController c;
+	public JLabel battery;
+	public JPanel panel;
+
+	public final ImageIcon[] battery_status = new ImageIcon[] {
+			new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/b.gif")),
+			new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/b_1.gif")),
+			new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/b_2.gif")),
+			new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/b_3.gif")),
+			new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/b_4.gif")) };
+	public JLabel arrow;
+	private JLabel lblMyPhone;
+	private JLabel iPhone_background;
+	public JLabel select;
 
 	public Creature getHero() {
 		return hero;
@@ -74,16 +89,18 @@ public class frmMain {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frmMain window = new frmMain();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		/*
+		 * EventQueue.invokeLater(new Runnable() { public void run() {
+		 */
+		try {
+			frmMain window = new frmMain();
+			window.frame.setVisible(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		/*
+		 * } });
+		 */
 	}
 
 	/**
@@ -97,6 +114,21 @@ public class frmMain {
 
 	}
 
+	public void restartGame() {
+		panel_4.setVisible(true);
+		mapLevel1.getMap().getHero().setCurrentPosition(new Point(110, 100));
+		mapLevel1.getMap().getHero().setLocation(110, 100);
+		mapLevel1.text.setText("<html>Let's explore the city!</html>");
+		mapLevel1.currentMapPiece = 1;
+		scrollPane.getVerticalScrollBar().setValue(0);
+		frame.setSize(1241, 881);
+		mapLevel1.gamePaused = false;
+		recharge.setVisible(false);
+		arrow.setVisible(false);
+
+		c.resetGame();
+	}
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -108,14 +140,15 @@ public class frmMain {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.LIGHT_GRAY);
-		panel.setBounds(12, 13, 334, 653);
+		panel = new JPanel();
+		panel.setBorder(new LineBorder(Color.BLACK, 3));
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(12, 10, 334, 629);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
 		panel_4 = new JPanel();
-		panel_4.setBounds(25, 131, 266, 383);
+		panel_4.setBounds(25, 100, 283, 417);
 		panel.add(panel_4);
 		panel_4.setLayout(null);
 
@@ -153,27 +186,66 @@ public class frmMain {
 		ImageIcon zoo = new ImageIcon(this.getClass().getResource("philiZoo.jpg"));
 		// Now we add the landmarks
 		listStreet.add(new Landmark("Philadelphia Zoo", 2, new Point(500, 250), 100, zooIcon, zoo, 60, 30,
-				"objective_4.jpg", false));
-		listStreet.add(new Landmark("Rocky Statue", 2, new Point(100, 850), 100, zooIcon, zoo, 60, 30,
-				"objective_5.jpg", false));
-		listStreet.add(new Landmark("Liberty Bell", 2, new Point(700, 400), 100, zooIcon, zoo, 60, 30,
-				"objective_3.jpg", false));
-		listStreet.add(new Landmark("Frankiln Institute", 2, new Point(700, 1000), 100, zooIcon, zoo, 60, 30,
-				"objective_1.jpg", false));
-		listStreet.add(new Landmark("Rhodium Museum", 2, new Point(500, 700), 100, zooIcon, zoo, 60, 30,
-				"objective_6.jpg", false));
+				"objective_4", false));
+
+		/*
+		 * listStreet.add(new Landmark("Philadelphia Zoo", 2, new Point(150,
+		 * 150), 100, zooIcon, zoo, 60, 30, "objective_4", false));
+		 */
+
+		listStreet.add(
+				new Landmark("Liberty Bell", 2, new Point(700, 400), 100, zooIcon, zoo, 60, 30, "objective_3", false));
 		listStreet.add(new Landmark("Independance Hall", 2, new Point(300, 550), 100, zooIcon, zoo, 60, 30,
-				"objective_2.jpg", false));
-		listStreet.add(new Landmark("Independance Hall", 2, new Point(300, 550), 100, zooIcon, zoo, 60, 30,
-				"objective_2.jpg", false));
+				"objective_2", false));
+		listStreet.add(new Landmark("Franklin Institute", 2, new Point(700, 1000), 100, zooIcon, zoo, 60, 30,
+				"objective_1", false));
+		listStreet.add(
+				new Landmark("Rocky Statue", 2, new Point(100, 850), 100, zooIcon, zoo, 60, 30, "objective_5", false));
+		listStreet.add(new Landmark("Rhodium Museum", 2, new Point(500, 700), 100, zooIcon, zoo, 60, 30, "objective_6",
+				false));
+
 		listStreet.add(new Landmark("", 2, new Point(100, 100), 100, zooIcon, zoo, 60, 30, "objective_2.jpg", true));
 
 		// Code for adding level 1
 
 		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(Color.GREEN);
-		panel_3.setBounds(980, 680, 227, 144);
+		panel_3.setBorder(new LineBorder(new Color(0, 0, 0), 2, true));
+		panel_3.setBackground(Color.WHITE);
+		panel_3.setBounds(12, 647, 334, 176);
 		frame.getContentPane().add(panel_3);
+		panel_3.setLayout(null);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(12, 142, 299, 10);
+		panel_3.add(progressBar);
+		progressBar.setMinimum(0);
+		progressBar.setMaximum(GlobalCitizenConstants.TIME_INTERVAL);
+
+		powerBar = new JLabel("100%");
+		powerBar.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		powerBar.setBounds(211, 54, 98, 75);
+		panel_3.add(powerBar);
+		powerBar.setHorizontalAlignment(SwingConstants.LEFT);
+
+		battery = new JLabel();
+		battery.setBounds(161, 54, 150, 75);
+		panel_3.add(battery);
+		battery.setIcon(new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/b_4.gif")));
+
+		lblMyPhone = new JLabel("My Phone");
+		lblMyPhone.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMyPhone.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblMyPhone.setBounds(12, 13, 310, 16);
+		panel_3.add(lblMyPhone);
+
+		iPhone_background = new JLabel("");
+		iPhone_background.setBounds(12, 54, 137, 75);
+		iPhone_background.setIcon(new ImageIcon(
+				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/background_bar.png"))
+						.getImage().getScaledInstance(iPhone_background.getWidth(), iPhone_background.getHeight(),
+								Image.SCALE_DEFAULT)));
+
+		panel_3.add(iPhone_background);
 
 		KeyboardFocusManager keyManager;
 
@@ -182,7 +254,10 @@ public class frmMain {
 
 			public boolean dispatchKeyEvent(KeyEvent e) {
 				if (e.getID() == KeyEvent.KEY_PRESSED) {
-					mapLevel1.moveHero(e.getKeyCode());
+					if (mapLevel1.threadsController.initialAnimationCompleted
+							&& mapLevel1.threadsController.say.size() == 0) {
+						mapLevel1.moveHero(e.getKeyCode());
+					}
 					return true;
 				}
 				return false;
@@ -192,39 +267,45 @@ public class frmMain {
 
 		panel_2 = new JPanel();
 		panel_2.setBackground(Color.YELLOW);
-		panel_2.setBounds(12, 680, 924, 144);
+		panel_2.setBounds(355, 10, 852, 150);
 
 		frame.getContentPane().add(panel_2);
 		panel_2.setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel
-				.setIcon(new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/film_strip.png")));
-		lblNewLabel.setBounds(0, 0, 923, 144);
+		lblNewLabel.setBounds(0, 0, 857, 150);
+		lblNewLabel.setIcon(new ImageIcon(
+				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/output_SgNnrV.gif"))
+						.getImage().getScaledInstance(lblNewLabel.getWidth(), lblNewLabel.getHeight(),
+								Image.SCALE_DEFAULT)));
+
 		panel_2.add(lblNewLabel);
 
 		JLabel minimapPin = new JLabel("");
-
+		minimapPin.setBounds(0, 0, 40, 40);
 		ImageIcon iconMinimapPin = new ImageIcon(
-				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/pin-animate.gif"));
-		Image scaleImageMinimapPin = iconMinimapPin.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/arrowkk2.gif"));
+		Image scaleImageMinimapPin = iconMinimapPin.getImage().getScaledInstance(minimapPin.getWidth(),
+				minimapPin.getHeight(), Image.SCALE_DEFAULT);
 		minimapPin.setIcon(new ImageIcon(scaleImageMinimapPin));
-		minimapPin.setBounds(0, 0, 50, 55);
+
 		panel_4.add(minimapPin);
 		minimapPin.setVisible(false);
 
-		panel_5 = new DigitalWatch();
-		panel_5.setBounds(25, 131, 283, 416);
+		panel_5 = new DigitalWatch(mapLevel1);
+		panel_5.setBounds(25, 100, 283, 416);
 		panel.add(panel_5);
 		panel_5.setVisible(false);
 
 		panel_1 = new JPanel();
 
 		// test
-		ImageIcon background = new ImageIcon(this.getClass().getResource("background_edited.png"));
-		mapLevel1 = new VisitorDraw(listStreet, new Point(110, 100), background, lblX, lblNewLabel, minimapPin, this);
+		ImageIcon background = new ImageIcon(this.getClass().getResource("Game Background_v3.png"));
+		mapLevel1 = new VisitorDraw(listStreet, GlobalCitizenConstants.INITIAL_HERO_RESPAWN, background, lblX,
+				lblNewLabel, minimapPin, this);
+
 		mapLevel1.setIcon(
-				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/background_v3.png")));
+				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/Game Background_v3.png")));
 		mapLevel1.setBounds(0, 0, 850, 1250);
 		panel_1.setPreferredSize(new Dimension(850, 1250));
 		panel_1.setLayout(null);
@@ -234,7 +315,7 @@ public class frmMain {
 
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(355, 13, 852, 653);
+		scrollPane.setBounds(355, 170, 852, 653);
 		frame.getContentPane().add(scrollPane);
 		listStreet.get(1).createCar(mapLevel1);
 		// listStreet.get(1).createCar(mapLevel1);
@@ -242,19 +323,17 @@ public class frmMain {
 
 		panel_4.setSize(new Dimension(mapLevel1.getWidth() / 3, mapLevel1.getHeight() / 3));
 
-		powerBar = new JLabel("About 30 secods left");
-		powerBar.setHorizontalAlignment(SwingConstants.CENTER);
-		powerBar.setBounds(72, 46, 179, 21);
-		panel.add(powerBar);
+		lblNewLabel_1 = new JLabel();
+		lblNewLabel_1.setBounds(0, 0, 283, 416);
+		ImageIcon iconMinimapBackground = new ImageIcon(
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/Game Background_v3.png"));
+		Image scaledIconMinimapBackground = iconMinimapBackground.getImage().getScaledInstance(panel_4.getWidth(),
+				panel_4.getHeight(), Image.SCALE_DEFAULT);
+		lblNewLabel_1.setIcon(new ImageIcon(scaledIconMinimapBackground));
+		panel_4.add(lblNewLabel_1);
 
-		progressBar = new JProgressBar();
-		progressBar.setBounds(72, 46, 179, 21);
-		progressBar.setMinimum(0);
-		progressBar.setMaximum(GlobalCitizenConstants.TIME_INTERVAL);
-		panel.add(progressBar);
-
-		mobile = new JLabel("");
-		mobile.setBounds(0, 80, 331, 528);
+		mobile = new JLabel();
+		mobile.setBounds(0, 46, 334, 528);
 
 		ImageIcon iconmobile = new ImageIcon(
 				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/mobile.png"));
@@ -262,24 +341,9 @@ public class frmMain {
 				Image.SCALE_DEFAULT);
 		mobile.setIcon(new ImageIcon(scalemobile));
 		panel.add(mobile);
-
-		recharge = new JButton();
-		recharge.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				frame.dispose();
-				frmMain window = new frmMain();
-				window.frame.setVisible(true);
-			}
-		});
 		ImageIcon iconRecharge = new ImageIcon(
-				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/recharge.png"));
-		recharge.setBounds(263, 13, 52, 54);
-		Image scaleIconRecharge = iconRecharge.getImage().getScaledInstance(recharge.getWidth(), recharge.getHeight(),
-				Image.SCALE_DEFAULT);
-		recharge.setIcon(new ImageIcon(scaleIconRecharge));
-
-		panel.add(recharge);
-		recharge.setVisible(false);
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/recharge.gif"));
+		// recharge.setVisible(false);
 
 		lblGlobalCitizen = new JLabel("GLOBAL CITIZEN");
 		lblGlobalCitizen.setHorizontalAlignment(SwingConstants.CENTER);
@@ -287,16 +351,57 @@ public class frmMain {
 		lblGlobalCitizen.setBounds(72, 13, 179, 20);
 		panel.add(lblGlobalCitizen);
 
+		recharge = new JButton();
+		recharge.setBounds(130, 573, 163, 54);
+		panel.add(recharge);
+		recharge.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// frame.dispose();
+				/*
+				 * frmMain window = new frmMain();
+				 * window.frame.setVisible(true);
+				 * window.mapLevel1.requestFocusInWindow(); initialize();
+				 */
+				restartGame();
+			}
+		});
+		Image scaleIconRecharge = iconRecharge.getImage().getScaledInstance(recharge.getWidth(), recharge.getHeight(),
+				Image.SCALE_DEFAULT);
+		recharge.setIcon(new ImageIcon(scaleIconRecharge));
+		recharge.setVisible(false);
+		arrow = new JLabel("");
+		arrow.setBounds(50, 573, 68, 54);
+		arrow.setIcon(new ImageIcon(
+				new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/right-arrow-29.gif"))
+						.getImage().getScaledInstance(arrow.getWidth(), arrow.getHeight(), Image.SCALE_DEFAULT)));
+		arrow.setVisible(false);
+		panel.add(arrow);
+		select = new JLabel("");
+		select.setBounds(50, 13, 50, 50);
+		select.setIcon(
+				new ImageIcon(new ImageIcon(frmMain.class.getResource("/com/globalcitizen/model/viewpercy/select.gif"))
+						.getImage().getScaledInstance(select.getWidth(), select.getHeight(), Image.SCALE_DEFAULT)));
+		select.setVisible(false);
+		lblNewLabel.add(select);
+
 		// Code for drawing Streets
 		mapLevel1.drawLandmarks(listStreet);
 
-		ThreadsController c = new ThreadsController(mapLevel1, this);
+		c = new ThreadsController(mapLevel1, this);
 		mapLevel1.setThreadsController(c);
 		// Let's start the game now..
 		mapLevel1.setScrollPane(scrollPane);
 
 		mapLevel1.repaint();
 		timeLeft = GlobalCitizenConstants.TIME_INTERVAL;
+		// Tutorial
+		mapLevel1.threadsController.say("tuto_01.png");
+		mapLevel1.threadsController.say("tuto_02.png");
+		mapLevel1.threadsController.say("tuto_03.png");
+		mapLevel1.threadsController.say("tuto_04.png");
+		mapLevel1.threadsController.say("tuto_05.png");
+		mapLevel1.threadsController.say("tuto_06.png");
+		mapLevel1.threadsController.say("tuto_07.png");
 		c.start();
 
 	}

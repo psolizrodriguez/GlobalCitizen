@@ -17,7 +17,7 @@ public class Hero extends Creature {
 		visitor.onDrawHero(g, this);
 	}
 
-	private int currentVerticalUp;
+	public int currentVerticalUp;
 	public final ImageIcon[] verticalUpImages = new ImageIcon[] {
 			new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/vu_01.png")),
 			new ImageIcon(this.getClass().getResource("/com/globalcitizen/model/viewpercy/vu_02.png")),

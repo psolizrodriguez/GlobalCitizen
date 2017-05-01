@@ -20,18 +20,21 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.globalcitizen.model.characters.Landmark;
+import com.globalcitizen.model.viewpercy.frmMain;
 import com.shape.visitor.Visitor;
 
 public class PuzzleEx extends JPanel {
 
 	private JPanel panel;
 	private BufferedImage source;
-	private ArrayList<MyButton> buttons;
+	ArrayList<MyButton> buttons;
 
 	ArrayList<Point> solution = new ArrayList();
 
@@ -42,15 +45,34 @@ public class PuzzleEx extends JPanel {
 	private BufferedImage resized;
 	Landmark landmark;
 	Visitor visitor;
+	public JLabel cameraImage;
+
+	public Landmark getLandmark() {
+		return landmark;
+	}
+
+	public void setLandmark(Landmark landmark) {
+		this.landmark = landmark;
+	}
 
 	public PuzzleEx() {
 		super();
+		cameraImage = new JLabel();
+
+		add(cameraImage);
 	}
 
 	public void loadImage(Landmark landmark, Visitor visitor) {
 		this.landmark = landmark;
 		this.visitor = visitor;
 		initUI();
+		cameraImage.setBounds(0, 0, this.getWidth(), this.getHeight());
+		ImageIcon cameraIcon = new ImageIcon(
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/low_level.jpg"));
+		Image scaleCameraIcon = cameraIcon.getImage().getScaledInstance(cameraImage.getWidth(), cameraImage.getHeight(),
+				Image.SCALE_DEFAULT);
+		cameraImage.setIcon(new ImageIcon(scaleCameraIcon));
+		cameraImage.setVisible(false);
 		/*
 		 * setAlwaysOnTop(true); setVisible(true);
 		 * setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -145,7 +167,7 @@ public class PuzzleEx extends JPanel {
 
 	private BufferedImage loadImage() throws IOException {
 
-		BufferedImage bimg = ImageIO.read(ClassLoader.getSystemResource(this.landmark.getLandmarkImage()));
+		BufferedImage bimg = ImageIO.read(ClassLoader.getSystemResource(this.landmark.getLandmarkImage() + ".jpg"));
 
 		return bimg;
 	}

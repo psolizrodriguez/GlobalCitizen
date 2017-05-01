@@ -22,6 +22,15 @@ public class Street {
 	List<Street> streets;
 	boolean hasToChangeView;
 	boolean landmark;
+	boolean startingPointTourist;
+
+	public boolean isStartingPointTourist() {
+		return startingPointTourist;
+	}
+
+	public void setStartingPointTourist(boolean startingPointTourist) {
+		this.startingPointTourist = startingPointTourist;
+	}
 
 	public boolean isLandmark() {
 		return landmark;
