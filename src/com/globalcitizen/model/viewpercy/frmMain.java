@@ -253,6 +253,7 @@ public class frmMain {
 		keyManager.addKeyEventDispatcher(new KeyEventDispatcher() {
 
 			public boolean dispatchKeyEvent(KeyEvent e) {
+				System.out.println("being called on pressed");
 				if (e.getID() == KeyEvent.KEY_PRESSED) {
 					if (mapLevel1.threadsController.initialAnimationCompleted
 							&& mapLevel1.threadsController.say.size() == 0) {
@@ -399,6 +400,7 @@ public class frmMain {
 		mapLevel1.threadsController.say("tuto_02.png");
 		mapLevel1.threadsController.say("tuto_03.png");
 		mapLevel1.threadsController.say("tuto_04.png");
+		mapLevel1.threadsController.say("tuto_08.png");
 		mapLevel1.threadsController.say("tuto_05.png");
 		mapLevel1.threadsController.say("tuto_06.png");
 		mapLevel1.threadsController.say("tuto_07.png");

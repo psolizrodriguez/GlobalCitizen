@@ -159,7 +159,7 @@ public class VisitorDraw extends Visitor {
 		lblTimeToExplore = new JLabel();
 		lblTimeToExplore.setBounds(50, 50, 550, 550);
 		ImageIcon iconExplore = new ImageIcon(
-				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/bubble_4.png"));
+				frmMain.class.getResource("/com/globalcitizen/model/viewpercy/bubble_5.png"));
 		Image scaleIconExplore = iconExplore.getImage().getScaledInstance(lblTimeToExplore.getWidth(),
 				lblTimeToExplore.getHeight(), Image.SCALE_DEFAULT);
 		lblTimeToExplore.setIcon(new ImageIcon(scaleIconExplore));

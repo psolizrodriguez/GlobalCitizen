@@ -14,6 +14,7 @@ public class KeyboardListener extends KeyAdapter {
 	}
 
 	public void keyPressed(KeyEvent e) {
+		System.out.println("key pressed");
 		System.out.println(e.getKeyCode());
 		if (e.getKeyCode() == 65) {
 			Achivement achivement = new Achivement();

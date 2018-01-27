@@ -1,162 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class-diagram version="1.1.14" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
-  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="com.globalcitizen.model.characters.Hero" project="GlobalCitizen" 
-    file="/GlobalCitizen/src/com/globalcitizen/model/characters/Hero.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="611" y="1246"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
+<class-diagram version="1.1.14" icons="false" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="com.globalcitizen.model.characters.Creature" project="GlobalCitizen" 
+    file="/GlobalCitizen/src/com/globalcitizen/model/characters/Creature.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="332" y="178"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="false">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
   <class id="2" language="java" name="com.globalcitizen.model.characters.Car" project="GlobalCitizen" 
     file="/GlobalCitizen/src/com/globalcitizen/model/characters/Car.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="280" y="1202"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
+    <position height="-1" width="-1" x="698" y="179"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="false">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="com.globalcitizen.model.characters.Creature" project="GlobalCitizen" 
-    file="/GlobalCitizen/src/com/globalcitizen/model/characters/Creature.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="369" y="312"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
+  <class id="3" language="java" name="com.globalcitizen.model.characters.Hero" project="GlobalCitizen" 
+    file="/GlobalCitizen/src/com/globalcitizen/model/characters/Hero.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="330" y="487"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="false">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.shape.visitor.VisitorDraw" project="GlobalCitizen" 
-    file="/GlobalCitizen/src/com/shape/visitor/VisitorDraw.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1047" y="943"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="com.globalcitizen.model.viewpercy.frmMain" project="GlobalCitizen" 
-    file="/GlobalCitizen/src/com/globalcitizen/model/viewpercy/frmMain.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1050" y="7"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="6" language="java" name="com.globalcitizen.model.characters.Map" project="GlobalCitizen" 
-    file="/GlobalCitizen/src/com/globalcitizen/model/characters/Map.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-118" y="896"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="com.globalcitizen.model.characters.Street" project="GlobalCitizen" 
+  <class id="4" language="java" name="com.globalcitizen.model.characters.Street" project="GlobalCitizen" 
     file="/GlobalCitizen/src/com/globalcitizen/model/characters/Street.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-123" y="190"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
+    <position height="-1" width="-1" x="1030" y="134"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="false">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="com.globalcitizen.model.characters.Landmarks" project="GlobalCitizen" 
-    file="/GlobalCitizen/src/com/globalcitizen/model/characters/Landmarks.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-117" y="1183"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
+  <class id="5" language="java" name="com.globalcitizen.model.characters.Map" project="GlobalCitizen" 
+    file="/GlobalCitizen/src/com/globalcitizen/model/characters/Map.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="705" y="422"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="false">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <association id="9">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="10" name="listCars"/>      
-      <multiplicity id="11" minimum="0" maximum="2147483647"/>    
+  <class id="6" language="java" name="com.globalcitizen.model.characters.Landmark" project="GlobalCitizen" 
+    file="/GlobalCitizen/src/com/globalcitizen/model/characters/Landmark.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1030" y="488"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="false">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <generalization id="7">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <association id="8">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="9" name="currentStreet"/>      
+      <multiplicity id="10" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
   </association>  
+  <generalization id="11">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
   <association id="12">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="13" name="landmarks"/>      
-      <multiplicity id="14" minimum="0" maximum="2147483647"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="13" name="hero"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
   </association>  
   <association id="15">    
-    <end type="SOURCE" refId="6" navigable="false">      
+    <end type="SOURCE" refId="5" navigable="false">      
       <attribute id="16" name="creatures"/>      
       <multiplicity id="17" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="18">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <association id="19">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="20" name="currentStreet"/>      
-      <multiplicity id="21" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="22">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="23" name="streets"/>      
-      <multiplicity id="24" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="25">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="3"/>  
-  </generalization>  
-  <association id="26">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="27" name="hero"/>      
-      <multiplicity id="28" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="29">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="30" name="map"/>      
-      <multiplicity id="31" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="32">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="33" name="streets"/>      
-      <multiplicity id="34" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="35">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="36" name="hero"/>      
-      <multiplicity id="37" minimum="0" maximum="1"/>    
-    </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
+    <display labels="false" multiplicity="false"/>  
   </association>  
-  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-    sort-features="false" accessors="true" visibility="true">    
+  <association id="18">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="19" name="listCars"/>      
+      <multiplicity id="20" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <association id="21">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="22" name="streets"/>      
+      <multiplicity id="23" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <generalization id="24">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <association id="25">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="26" name="streets"/>      
+      <multiplicity id="27" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="false" multiplicity="false"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+    sort-features="false" accessors="true" visibility="false">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
-    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+    <operations public="false" package="false" protected="false" private="false" static="true"/>  
   </classifier-display>  
-  <association-display labels="true" multiplicity="true"/>
+  <association-display labels="false" multiplicity="false"/>
 </class-diagram>
